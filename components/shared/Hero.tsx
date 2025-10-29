@@ -37,7 +37,7 @@ const Hero = () => {
         </Highlighter>{" "}
         </p>
         <Link href={'/create'}>
-        <Button className='mt-5 h-8'>Get Started<CircleArrowOutUpRight /></Button>
+        <Button className='mt-8'>Create your first Invoice<CircleArrowOutUpRight /></Button>
         </Link>
       </div>
     </div>

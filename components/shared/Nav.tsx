@@ -1,4 +1,7 @@
+import { SignedIn, SignedOut, SignUpButton, UserButton } from '@clerk/nextjs'
 import { ModeToggle } from './ThemeSwitch'
+import { Button } from '../ui/button'
+
 
 const Nav = () => {
   return (
@@ -6,7 +9,15 @@ const Nav = () => {
         <div>
             <p className='font-mono text-xl'>Invox</p>
         </div>
-        <div>
+        <div className='flex items-center gap-2'>
+          <SignedOut>
+            <SignUpButton>
+            <Button variant={"outline"} className='h-8'>Login</Button>
+            </SignUpButton>
+          </SignedOut>
+          <SignedIn>
+            <UserButton/>
+          </SignedIn>
             <ModeToggle/>
         </div>
     </div>
