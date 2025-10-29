@@ -1,5 +1,7 @@
 import { Button } from '../ui/button'
 import { CircleArrowOutUpRight } from 'lucide-react'
+import { Highlighter } from '../ui/highlighter'
+import Link from 'next/link'
 
 const Hero = () => {
   return (
@@ -28,9 +30,15 @@ const Hero = () => {
       {/* Content */}
       <div className="relative z-10 px-4 py-6">
         <p className="text-3xl md:text-5xl md:w-xl lg:text-6xl lg:w-2xl">
-          Professional invoices, made effortless.
+          <Highlighter action="highlight" color="#87CEFA">
+          Professional
+        </Highlighter>{" "} invoices, made <Highlighter action="underline" color="#87CEFA">
+          effortless.
+        </Highlighter>{" "}
         </p>
+        <Link href={'/create'}>
         <Button className='mt-5 h-8'>Get Started<CircleArrowOutUpRight /></Button>
+        </Link>
       </div>
     </div>
   )

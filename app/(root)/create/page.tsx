@@ -8,7 +8,7 @@ export default function Home(){
   const [text, setText] = useState("");
   const [font, setFont] = useState("helvetica");
 
-  const savePdf = (e) =>{
+  const savePdf = (e: React.FormEvent<HTMLFormElement>) =>{
     e.preventDefault();
     const doc = new jsPDF();
 
