@@ -1,7 +1,5 @@
 "use client"
-import React from 'react';
-import { Page, Text, View, Document, StyleSheet, PDFDownloadLink, PDFViewer, ReactPDF  } from '@react-pdf/renderer';
-import { div } from 'motion/react-m';
+import { Page, Text, View, Document, StyleSheet, PDFDownloadLink, PDFViewer } from '@react-pdf/renderer';
 
 
 const styles = StyleSheet.create({
