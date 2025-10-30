@@ -1,68 +1,53 @@
-/* Main Layout */
-.editorContainer {
-  display: flex;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  background-color: #f4f7fa;
-  min-height: 100vh;
+.invoice {
+  /* -- Light Theme (Default) -- */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f7fafc;
+  --bg-tertiary: #f9f9f9;
+  --bg-header: #6366F1;
+  --text-primary: #1a202c;
+  --text-primary-inverted: #2d3748; /* For light text on light bg in dark mode */
+  --text-secondary: #4a5568;
+  --text-tertiary: #718096;
+  --text-inverted: #ffffff;
+  --text-accent: #a0aec0;
+  --border-primary: #eee;
+  --border-secondary: #e0e0e0;
+  --border-strong: #1a202c;
+  --shadow-primary: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
 }
 
-/* Sidebar */
-.sidebar {
-  width: 320px;
-  flex-shrink: 0;
-  padding: 24px;
-  background-color: #ffffff;
-  border-right: 1px solid #e0e0e0;
-  overflow-y: auto;
+.invoice.darkMode {
+  /* -- Dark Theme (Overrides) -- */
+  --bg-primary: #1a202c;
+  --bg-secondary: #2d3748;
+  --bg-tertiary: #1F2937;
+  --bg-header: #4f46e5;
+  --text-primary: #f7fafc;
+  --text-primary-inverted: #f7fafc;
+  --text-secondary: #cbd5e0;
+  --text-tertiary: #94a3b8;
+  --text-inverted: #ffffff;
+  --text-accent: #64748b;
+  --border-primary: #374151;
+  --border-secondary: #4b5563;
+  --border-strong: #f7fafc;
+  --shadow-primary: 0 10px 15px -3px rgba(0,0,0,0.3), 0 4px 6px -2px rgba(0,0,0,0.25);
 }
-.sidebar h3 {
-  margin-top: 0;
-  margin-bottom: 24px;
-  font-size: 1.25rem;
-  color: #1a202c;
-}
-.formGroup {
-  margin-bottom: 16px;
-}
-.formGroup label {
-  display: block;
-  font-weight: 500;
-  font-size: 0.875rem;
-  margin-bottom: 6px;
-  color: #4a5568;
-}
-.formGroup input,
-.formGroup textarea {
-  width: 100%;
-  padding: 10px 12px;
-  border: 1px solid #cbd5e0;
-  border-radius: 6px;
-  font-size: 1rem;
-  box-sizing: border-box; /* Important for padding to work nicely */
-}
-.formGroup textarea {
-  min-height: 80px;
-  resize: vertical;
-}
+/* --- End of Color Variables --- */
 
-/* Preview Area */
-.previewArea {
-  flex-grow: 1;
-  padding: 32px;
-  overflow-y: auto;
-  display: flex;
-  justify-content: center;
-}
 
 /* Invoice Styling (from image) */
 .invoice {
   width: 100%;
   max-width: 800px;
   height: min-content; /* Stops it from stretching */
-  background-color: #ffffff;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
   padding: 48px;
-  box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+  box-shadow: var(--shadow-primary);
   border-radius: 8px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  transition: background-color 0.3s, color 0.3s;
 }
 
 .invoiceHeader {
@@ -74,12 +59,12 @@
 .invoiceHeader h1 {
   margin: 0;
   font-size: 2.5rem;
-  color: #1a202c;
+  color: var(--text-primary);
   font-weight: 800;
 }
 .invoiceNumber {
   font-size: 1.5rem;
-  color: #a0aec0; /* Lighter text like image */
+  color: var(--text-accent); /* Lighter text like image */
 }
 
 .metaInfo {
@@ -91,11 +76,11 @@
   margin: 0;
   line-height: 1.6;
   font-size: 0.9rem;
-  color: #2d3748;
+  color: var(--text-primary-inverted);
 }
 .metaInfo p:first-child { /* The label e.g., "Serial Number" */
   font-weight: bold;
-  color: #4a5568;
+  color: var(--text-secondary);
   font-size: 0.8rem;
   text-transform: uppercase;
   margin-bottom: 2px;
@@ -105,15 +90,16 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 32px;
-  background-color: #f7fafc;
+  background-color: var(--bg-secondary);
   padding: 24px;
   border-radius: 8px;
   margin-bottom: 48px;
+  transition: background-color 0.3s;
 }
 .billingTitle {
   margin: 0 0 8px 0;
   font-size: 0.75rem;
-  color: #718096;
+  color: var(--text-tertiary);
   text-transform: uppercase;
   letter-spacing: 0.5px;
   font-weight: 600;
@@ -121,7 +107,7 @@
 .billingInfo p {
   margin: 0;
   line-height: 1.6;
-  color: #2d3748;
+  color: var(--text-primary);
 }
 
 .itemsTable {
@@ -134,8 +120,9 @@
   text-align: left;
 }
 .itemsHeader {
-  background-color: #6366F1; /* Using a more common default purple */
-  color: #ffffff;
+  background-color: var(--bg-header); /* Using a more common default purple */
+  color: var(--text-inverted);
+  transition: background-color 0.3s;
 }
 .itemsHeader th {
   font-weight: 600;
@@ -148,11 +135,13 @@
 }
 
 .itemsTable tbody tr:nth-child(even) {
-  background-color: #f9f9f9;
+  background-color: var(--bg-tertiary);
+  transition: background-color 0.3s;
 }
 .itemsTable tbody tr td {
-  border-bottom: 1px solid #eee;
-  color: #2d3748;
+  border-bottom: 1px solid var(--border-primary);
+  color: var(--text-primary-inverted);
+  transition: border-color 0.3s;
 }
 .itemsTable th:last-child,
 .itemsTable td:last-child {
@@ -160,14 +149,15 @@
 }
 
 .grandTotal td {
-  border-top: 2px solid #1a202c;
+  border-top: 2px solid var(--border-strong);
 }
 
 
 /* Add this to create the empty space when no items */
 .emptyRow td {
   padding: 150px 0; /* Creates the large empty space */
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--border-primary);
+  transition: border-color 0.3s;
 }
 
 
@@ -187,18 +177,19 @@
 }
 
 .totalsLabel {
-  color: #4a5568;
+  color: var(--text-secondary);
 }
 
 .totalsValue {
   font-weight: 500;
-  color: #1a202c;
+  color: var(--text-primary);
 }
 
 .totalsDivider {
   border: 0;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid var(--border-secondary);
   margin: 8px 0;
+  transition: border-color 0.3s;
 }
 
 /* This targets the 'Total' row */
@@ -218,12 +209,48 @@
 .totalInWords p:first-child {
   /* "Invoice Total (in words)" */
   font-size: 0.8rem;
-  color: #718096;
+  color: var(--text-tertiary);
 }
 .totalInWords p:last-child {
   /* "zero" */
   font-size: 0.9rem;
   font-weight: 500;
-  color: #2d3748;
+  color: var(--text-primary-inverted);
   text-transform: capitalize;
+}
+/* Add this for the logo */
+.companyLogo {
+  width: 120px;
+  height: auto;
+  margin-bottom: 16px; /* Adds space between logo and text */
+  border-radius: 6px;
+  object-fit: contain;
+}
+
+/* Add these for the signature */
+.signatureSection {
+  margin-top: 48px;
+  width: 45%;
+  margin-left: auto; /* Aligns to the right, matching totals */
+  text-align: right;
+}
+
+.companySignature {
+  width: 160px; /* Signatures are often wide */
+  height: auto;
+  object-fit: contain;
+  
+  /* This filter inverts black-on-transparent PNGs in dark mode */
+  .darkMode & {
+    filter: invert(1);
+  }
+}
+
+.signatureSection p {
+  margin: 4px 0 0 0;
+  font-size: 0.8rem;
+  color: var(--text-tertiary);
+  border-top: 1px solid var(--border-secondary);
+  padding-top: 8px;
+  transition: border-color 0.3s;
 }

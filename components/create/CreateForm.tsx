@@ -51,7 +51,7 @@ const initialInvoiceData = {
   ],
   // You can add fields for logo, signature, etc. here
   companyLogo: "https://shorthand.com/the-craft/raster-images/assets/5kVrMqC0wp/sh-unsplash_5qt09yibrok-4096x2731.jpeg",
-  companySignature: null,
+  companySignature: "https://upload.wikimedia.org/wikipedia/commons/3/38/Alice_Sara_Ott_-_Signature.jpg",
 };
 
 
@@ -245,7 +245,10 @@ export function CreateForm() {
         {/* Pass the entire state object down as a prop.
           The PDFViewer will now re-render whenever invoiceData changes.
         */}
-        <PDFViewer invoiceData={invoiceData} />
+        <PDFViewer invoiceData={invoiceData} 
+
+        // Passing in Dark mode
+        isDarkMode={false} />
       </div>
       </div>
 

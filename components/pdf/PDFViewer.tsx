@@ -10,7 +10,7 @@ const numberToWords = (num) => {
   return "a non-zero amount"; 
 }
 
-const PDFViewer = ({ invoiceData }) => {
+const PDFViewer = ({ invoiceData, isDarkMode }) => {
 
   if (!invoiceData) {
     return <div>Loading preview...</div>
@@ -24,9 +24,11 @@ const PDFViewer = ({ invoiceData }) => {
   const totalInWords = numberToWords(total);
 
   return (
-    <div className={styles.invoice}>
+    <div 
+      className={`${styles.invoice} ${isDarkMode ? styles.darkMode : ''}`}
+    >
       
-      {/* --- Header, Meta, Billing Info (Unchanged) --- */}
+      {/* --- Header & Meta Info --- */}
       <div className={styles.invoiceHeader}>
         <h1>Invoice</h1>
         <span className={styles.invoiceNumber}>{invoiceData.invoiceNumber}</span>
@@ -47,9 +49,21 @@ const PDFViewer = ({ invoiceData }) => {
         </div>
       </div>
 
+      {/* --- Billing Info (Now includes Logo) --- */}
       <div className={styles.billingInfo}>
         <div>
           <h4 className={styles.billingTitle}>Billed By</h4>
+          
+          {/* === LOGO IS ADDED HERE === */}
+          {invoiceData.companyLogo && (
+            <img 
+              src={invoiceData.companyLogo} 
+              alt="Company Logo" 
+              className={styles.companyLogo} 
+              onError={(e) => e.target.style.display = 'none'} // Hide if image fails to load
+            />
+          )}
+
           <p>{invoiceData.billedBy.name}</p>
           <p>{invoiceData.billedBy.address}</p>
         </div>
@@ -60,7 +74,7 @@ const PDFViewer = ({ invoiceData }) => {
         </div>
       </div>
 
-      {/* --- Items Table (tfoot is removed) --- */}
+      {/* --- Items Table --- */}
       <table className={styles.itemsTable}>
         <thead>
           <tr className={styles.itemsHeader}>
@@ -79,19 +93,16 @@ const PDFViewer = ({ invoiceData }) => {
               <td>${item.total.toFixed(2)}</td>
             </tr>
           ))}
-          {/* This empty row creates the large white space
-            seen in your image when there are no items.
-          */}
-          {invoiceData.items.length === 0 && (
+          {/* This empty row creates the large white space */}
+          {(invoiceData.items.length === 0 || invoiceData.items.length > 0) && (
             <tr className={styles.emptyRow}>
               <td colSpan="4"></td>
             </tr>
           )}
         </tbody>
-        {/* The <tfoot> ... </tfoot> section is fully removed */}
       </table>
 
-      {/* === NEW TOTALS SECTION (matches your second image) === */}
+      {/* --- Totals Section --- */}
       <div className={styles.totalsSection}>
         <div className={styles.totalsRow}>
           <span className={styles.totalsLabel}>Subtotal</span>
@@ -110,6 +121,19 @@ const PDFViewer = ({ invoiceData }) => {
           <p>{totalInWords}</p>
         </div>
       </div>
+      
+      {/* --- Signature Section --- */}
+      {invoiceData.companySignature && (
+        <div className={styles.signatureSection}>
+          <img 
+            src={invoiceData.companySignature} 
+            alt="Signature" 
+            className={styles.companySignature} 
+            onError={(e) => e.target.style.display = 'none'} // Hide if image fails
+          />
+          <p>Authorized Signature</p>
+        </div>
+      )}
       
     </div>
   )
