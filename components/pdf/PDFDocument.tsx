@@ -1,8 +1,8 @@
 "use client";
 
 import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
-import { CreateForm } from "../create/CreateForm";
 
+// Styles
 const styles = StyleSheet.create({
   page: { padding: 30 },
   section: { marginBottom: 10 },
@@ -10,6 +10,24 @@ const styles = StyleSheet.create({
   text: { fontSize: 12 },
   itemRow: { flexDirection: "row", justifyContent: "space-between" },
 });
+
+// Type for each item
+type PDFItem = {
+  name: string;
+  price: number;
+};
+
+// Props type
+type MyPDFProps = {
+  heading: string;
+  date: string;
+  serialNumber: string;
+  billedBy: string;
+  name: string;
+  message: string;
+  items?: PDFItem[];
+  total: number;
+};
 
 export default function MyPDF({
   heading,
@@ -20,10 +38,11 @@ export default function MyPDF({
   message,
   items = [],
   total,
-}) {
+}: MyPDFProps) {
   return (
     <Document>
       <Page style={styles.page}>
+        {/* Header Section */}
         <View style={styles.section}>
           <Text style={styles.heading}>{heading}</Text>
           <Text style={styles.text}>Date: {date}</Text>
@@ -33,16 +52,17 @@ export default function MyPDF({
           <Text style={styles.text}>Message: {message}</Text>
         </View>
 
+        {/* Items Section */}
         <View style={styles.section}>
           <Text style={styles.heading}>Items</Text>
           {items.map((item, idx) => (
             <View key={idx} style={styles.itemRow}>
               <Text>{item.name}</Text>
-              <Text>{item.price} CAD</Text>
+              <Text>{item.price.toFixed(2)} CAD</Text>
             </View>
           ))}
           <Text style={{ marginTop: 10, fontWeight: "bold" }}>
-            Total: {total}
+            Total: {total.toFixed(2)}
           </Text>
         </View>
       </Page>

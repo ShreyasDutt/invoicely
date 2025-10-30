@@ -1,3 +1,4 @@
+"use client"
 import {
   Field,
   FieldGroup,
@@ -21,10 +22,133 @@ import {
 import { Textarea } from "@/components/ui/textarea"
 import { FileImage } from "lucide-react"
 import { Label } from "@radix-ui/react-label"
+import getSymbolFromCurrency from "currency-symbol-map"
+import { useRef, useState } from "react"
+import { Button } from "../ui/button"
+import { Calendar28 } from "./DatePicker"
+import PDFViewer from "../pdf/PDFViewer"
+
+
 
 export function CreateForm() {
+  const initialInvoiceData = {
+  invoiceNumber: "INV-0001",
+  serialNumber: "0001",
+  date: "2025-10-29", // Use YYYY-MM-DD for date inputs
+  currency: "USD",
+  billedBy: {
+    name: "Invoicely Ltd",
+    address: "123 Main St, Anytown, USA",
+  },
+  billedTo: {
+    name: "John Doe",
+    address: "456 Second St, Anytown, USA",
+  },
+  items: [
+    { id: 1, name: "Web Design Services", qty: 1, price: 1200, total: 1200 },
+    { id: 2, name: "Hosting (1 Year)", qty: 1, price: 150, total: 150 },
+    { id: 3, name: "Web Design Services", qty: 1, price: 1200, total: 1200 },
+    { id: 4, name: "Hosting (1 Year)", qty: 1, price: 150, total: 150 },
+    { id: 5, name: "Web Design Services", qty: 1, price: 1200, total: 1200 },
+    { id: 6, name: "Hosting (1 Year)", qty: 1, price: 150, total: 150 },
+  ],
+  // You can add fields for logo, signature, etc. here
+  companyLogo: "https://shorthand.com/the-craft/raster-images/assets/5kVrMqC0wp/sh-unsplash_5qt09yibrok-4096x2731.jpeg",
+  companySignature: "https://upload.wikimedia.org/wikipedia/commons/3/38/Alice_Sara_Ott_-_Signature.jpg",
+};
+  const [color, setColor] = useState('#0080ff');
+  const ColorInputClick = useRef<HTMLInputElement>(null)
+
+const currencies = [
+  "USD", // US Dollar
+  "EUR", // Euro
+  "GBP", // British Pound
+  "INR", // Indian Rupee
+  "CAD", // Canadian Dollar
+  "AUD", // Australian Dollar
+  "JPY", // Japanese Yen
+  "CHF", // Swiss Franc
+  "CNY", // Chinese Yuan
+  "NZD", // New Zealand Dollar
+  "SGD", // Singapore Dollar
+  "HKD", // Hong Kong Dollar
+  "SEK", // Swedish Krona
+  "NOK", // Norwegian Krone
+  "DKK", // Danish Krone
+  "MXN", // Mexican Peso
+  "BRL", // Brazilian Real
+  "ZAR", // South African Rand
+  "RUB", // Russian Ruble
+  "TRY", // Turkish Lira
+  "KRW", // South Korean Won
+  "IDR", // Indonesian Rupiah
+  "MYR", // Malaysian Ringgit
+  "PHP", // Philippine Peso
+  "THB", // Thai Baht
+  "SAR", // Saudi Riyal
+  "AED", // UAE Dirham
+  "PLN", // Polish Zloty
+];
+
+type PersonInfo = {
+  name: string
+  address: string
+}
+
+type Item = {
+  id: number
+  name: string
+  qty: number
+  price: number
+  total: number
+}
+
+type InvoiceData = {
+  invoiceNumber: string
+  serialNumber: string
+  date: string // or Date if you want to store as Date
+  currency: string
+  billedBy: PersonInfo
+  billedTo: PersonInfo
+  items: Item[]
+  companyLogo?: string
+  companySignature?: string
+}
+
+
+const [invoiceData, setInvoiceData] = useState<InvoiceData>(initialInvoiceData)
+
+// For input fields
+const handleBilledByName = (e: React.ChangeEvent<HTMLInputElement>) => {
+  setInvoiceData(prev => ({
+    ...prev,
+    billedBy: { ...prev.billedBy, name: e.target.value }
+  }))
+}
+
+const handleBilledByAddress = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  setInvoiceData(prev => ({
+    ...prev,
+    billedBy: { ...prev.billedBy, address: e.target.value }
+  }))
+}
+
+const handleBilledToName = (e: React.ChangeEvent<HTMLInputElement>) => {
+  setInvoiceData(prev => ({
+    ...prev,
+    billedTo: { ...prev.billedTo, name: e.target.value }
+  }))
+}
+
+const handleBilledToAddress = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  setInvoiceData(prev => ({
+    ...prev,
+    billedTo: { ...prev.billedTo, address: e.target.value }
+  }))
+}
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-4 md:p-8 min-h-screen">
+     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-4 md:p-8 min-h-screen">
     <div className="p-4 md:p-6 rounded-lg shadow-sm h-fit">
     <Accordion
       type="single"
@@ -222,7 +346,7 @@ export function CreateForm() {
         </AccordionContent>
       </AccordionItem>
     </Accordion>
-    </div>
+     </div>
 
     <div>
         {/* Pass the entire state object down as a prop.
@@ -234,6 +358,5 @@ export function CreateForm() {
         isDarkMode={false} />
       </div>
       </div>
-
   )
 }

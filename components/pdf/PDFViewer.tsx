@@ -1,34 +1,59 @@
 "use client"
-import React from 'react'
+
 import styles from './PDFViewer.module.css'
 
-// This is a placeholder. In a real app, you'd use a library
-// for this, but it matches the "zero" in your image.
-const numberToWords = (num) => {
-  if (num === 0) return "zero";
-  // A full implementation is complex.
-  return "a non-zero amount"; 
+// Define types (reuse from your form if available)
+type PersonInfo = {
+  name: string
+  address: string
 }
 
-const PDFViewer = ({ invoiceData, isDarkMode }) => {
+type Item = {
+  id: number
+  name: string
+  qty: number
+  price: number
+  total: number
+}
+
+export type InvoiceData = {
+  invoiceNumber: string
+  serialNumber: string
+  date: string
+  currency: string
+  billedBy: PersonInfo
+  billedTo: PersonInfo
+  items: Item[]
+  companyLogo?: string
+  companySignature?: string
+}
+
+// Props for PDFViewer
+type PDFViewerProps = {
+  invoiceData: InvoiceData
+  isDarkMode: boolean
+}
+
+// Simple number-to-words placeholder
+const numberToWords = (num: number): string => {
+  if (num === 0) return "zero"
+  return "a non-zero amount"
+}
+
+const PDFViewer: React.FC<PDFViewerProps> = ({ invoiceData, isDarkMode }) => {
 
   if (!invoiceData) {
     return <div>Loading preview...</div>
   }
 
-  // Calculate totals
-  const subtotal = invoiceData.items.reduce((acc, item) => acc + item.total, 0);
-  
-  // In your new image, Total is the same as Subtotal (no tax shown)
-  const total = subtotal; 
-  const totalInWords = numberToWords(total);
+  const subtotal = invoiceData.items.reduce((acc, item) => acc + item.total, 0)
+  const total = subtotal
+  const totalInWords = numberToWords(total)
 
   return (
-    <div 
-      className={`${styles.invoice} ${isDarkMode ? styles.darkMode : ''}`}
-    >
+    <div className={`${styles.invoice} ${isDarkMode ? styles.darkMode : ''}`}>
       
-      {/* --- Header & Meta Info --- */}
+      {/* Header & Meta Info */}
       <div className={styles.invoiceHeader}>
         <h1>Invoice</h1>
         <span className={styles.invoiceNumber}>{invoiceData.invoiceNumber}</span>
@@ -49,21 +74,18 @@ const PDFViewer = ({ invoiceData, isDarkMode }) => {
         </div>
       </div>
 
-      {/* --- Billing Info (Now includes Logo) --- */}
+      {/* Billing Info */}
       <div className={styles.billingInfo}>
         <div>
           <h4 className={styles.billingTitle}>Billed By</h4>
-          
-          {/* === LOGO IS ADDED HERE === */}
           {invoiceData.companyLogo && (
             <img 
               src={invoiceData.companyLogo} 
               alt="Company Logo" 
               className={styles.companyLogo} 
-              onError={(e) => e.target.style.display = 'none'} // Hide if image fails to load
+              onError={(e) => (e.currentTarget.style.display = 'none')}
             />
           )}
-
           <p>{invoiceData.billedBy.name}</p>
           <p>{invoiceData.billedBy.address}</p>
         </div>
@@ -74,7 +96,7 @@ const PDFViewer = ({ invoiceData, isDarkMode }) => {
         </div>
       </div>
 
-      {/* --- Items Table --- */}
+      {/* Items Table */}
       <table className={styles.itemsTable}>
         <thead>
           <tr className={styles.itemsHeader}>
@@ -93,16 +115,13 @@ const PDFViewer = ({ invoiceData, isDarkMode }) => {
               <td>${item.total.toFixed(2)}</td>
             </tr>
           ))}
-          {/* This empty row creates the large white space */}
-          {(invoiceData.items.length === 0 || invoiceData.items.length > 0) && (
-            <tr className={styles.emptyRow}>
-              <td colSpan="4"></td>
-            </tr>
-          )}
+          <tr className={styles.emptyRow}>
+            <td colSpan={4}></td>
+          </tr>
         </tbody>
       </table>
 
-      {/* --- Totals Section --- */}
+      {/* Totals */}
       <div className={styles.totalsSection}>
         <div className={styles.totalsRow}>
           <span className={styles.totalsLabel}>Subtotal</span>
@@ -121,20 +140,19 @@ const PDFViewer = ({ invoiceData, isDarkMode }) => {
           <p>{totalInWords}</p>
         </div>
       </div>
-      
-      {/* --- Signature Section --- */}
+
+      {/* Signature */}
       {invoiceData.companySignature && (
         <div className={styles.signatureSection}>
           <img 
             src={invoiceData.companySignature} 
             alt="Signature" 
             className={styles.companySignature} 
-            onError={(e) => e.target.style.display = 'none'} // Hide if image fails
+            onError={(e) => (e.currentTarget.style.display = 'none')}
           />
           <p>Authorized Signature</p>
         </div>
       )}
-      
     </div>
   )
 }
