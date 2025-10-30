@@ -1,6 +1,7 @@
 import { CreateForm } from "@/components/create/CreateForm"
 import PDFViewer from "@/components/pdf/PDFViewer"
 import Nav from "@/components/shared/Nav"
+import { Sidebar } from "@/components/shared/Sidebar"
 import { Button } from "@/components/ui/button"
 import { Download, ScanEye } from "lucide-react"
 
@@ -11,6 +12,7 @@ const page = () => {
         <Nav />
       </div>
       <div className="flex items-center justify-end p-4 border gap-3 px-5">
+        <Sidebar/>
         <Button variant={'outline'}>Preview <ScanEye/></Button>
         <Button>Download <Download/></Button>
       </div>
