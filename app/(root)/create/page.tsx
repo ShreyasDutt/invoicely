@@ -8,7 +8,7 @@ const page = () => {
         <Nav/>
       </div>
 
-      <div className="px-10">
+      <div className="px-2">
         <CreateForm/>
       </div>
       </>

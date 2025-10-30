@@ -1,3 +1,4 @@
+"use client"
 import {
   Field,
   FieldGroup,
@@ -5,13 +6,13 @@ import {
   FieldSet,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-// import {
-//   Select,
-//   SelectContent,
-//   SelectItem,
-//   SelectTrigger,
-//   SelectValue,
-// } from "@/components/ui/select"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import {
   Accordion,
   AccordionContent,
@@ -21,8 +22,48 @@ import {
 import { Textarea } from "@/components/ui/textarea"
 import { FileImage } from "lucide-react"
 import { Label } from "@radix-ui/react-label"
+import getSymbolFromCurrency from "currency-symbol-map"
+import { useRef, useState } from "react"
+import { Button } from "../ui/button"
+import { Calendar28 } from "./DatePicker"
 
 export function CreateForm() {
+
+  const [color, setColor] = useState('#0080ff');
+  const ColorInputClick = useRef<HTMLInputElement>(null)
+
+const currencies = [
+  "USD", // US Dollar
+  "EUR", // Euro
+  "GBP", // British Pound
+  "INR", // Indian Rupee
+  "CAD", // Canadian Dollar
+  "AUD", // Australian Dollar
+  "JPY", // Japanese Yen
+  "CHF", // Swiss Franc
+  "CNY", // Chinese Yuan
+  "NZD", // New Zealand Dollar
+  "SGD", // Singapore Dollar
+  "HKD", // Hong Kong Dollar
+  "SEK", // Swedish Krona
+  "NOK", // Norwegian Krone
+  "DKK", // Danish Krone
+  "MXN", // Mexican Peso
+  "BRL", // Brazilian Real
+  "ZAR", // South African Rand
+  "RUB", // Russian Ruble
+  "TRY", // Turkish Lira
+  "KRW", // South Korean Won
+  "IDR", // Indonesian Rupiah
+  "MYR", // Malaysian Ringgit
+  "PHP", // Philippine Peso
+  "THB", // Thai Baht
+  "SAR", // Saudi Riyal
+  "AED", // UAE Dirham
+  "PLN", // Polish Zloty
+];
+
+
   return (
     <Accordion
       type="single"
@@ -84,7 +125,7 @@ export function CreateForm() {
           <FieldSet>
               <Field>
                 <FieldLabel htmlFor="checkout-7j9-card-name-43j">
-                  Company name
+                  Company Name
                 </FieldLabel>
                 <Input
                   id="checkout-7j9-card-name-43j"
@@ -94,7 +135,7 @@ export function CreateForm() {
               </Field>
               <Field>
                 <FieldLabel htmlFor="checkout-7j9-card-number-uw1">
-                  Company address
+                  Company Address
                 </FieldLabel>
                 <Textarea
                   id="checkout-7j9-card-number-uw1"
@@ -109,27 +150,27 @@ export function CreateForm() {
         </AccordionContent>
       </AccordionItem>
       <AccordionItem value="item-2">
-        <AccordionTrigger>Shipping Details</AccordionTrigger>
+        <AccordionTrigger>Client Details</AccordionTrigger>
         <AccordionContent className="flex flex-col gap-4 text-balance">
           <FieldGroup>
             <FieldSet>
               <Field>
                 <FieldLabel htmlFor="checkout-7j9-card-name-43j">
-                  Company name
+                  Client Name
                 </FieldLabel>
                 <Input
                   id="checkout-7j9-card-name-43j"
-                  placeholder="Invox"
+                  placeholder="John Doe"
                   required
                 />
               </Field>
               <Field>
                 <FieldLabel htmlFor="checkout-7j9-card-number-uw1">
-                  Company address
+                  Client Address
                 </FieldLabel>
                 <Textarea
                   id="checkout-7j9-card-number-uw1"
-                  placeholder="1234 Main St"
+                  placeholder="1234 Second St"
                   className="resize-none"
                 />
               </Field>
@@ -139,29 +180,81 @@ export function CreateForm() {
         </AccordionContent>
       </AccordionItem>
       <AccordionItem value="item-3">
-        <AccordionTrigger>Return Policy</AccordionTrigger>
+        <AccordionTrigger>Invoice details</AccordionTrigger>
         <AccordionContent className="flex flex-col gap-4 text-balance">
-                    <FieldGroup>
+            <FieldGroup>
             <FieldSet>
               <Field>
                 <FieldLabel htmlFor="checkout-7j9-card-name-43j">
                   Company name
                 </FieldLabel>
-                <Input
-                  id="checkout-7j9-card-name-43j"
-                  placeholder="Invox"
-                  required
-                />
+                <div className="flex items-center justify-center gap-3">
+                    <Select defaultValue="USD">
+                      <SelectTrigger className="w-[100px]">
+                        <SelectValue placeholder="Select currency" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {currencies.map((code) => (
+                          <SelectItem key={code} value={code}>
+                            {code}  <p>{getSymbolFromCurrency(code)}</p>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <Select defaultValue="light">
+                      <SelectTrigger className="w-[100px]">
+                        <SelectValue placeholder="Select currency" />
+                        <SelectValue placeholder="Dark"/>
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="dark">Dark</SelectItem>
+                        <SelectItem value="light">Light</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <Label className="flex gap-2">
+                      <Button className={`rounded-md`} style={{ backgroundColor: color }} onClick={()=>{
+                        ColorInputClick.current?.click()
+                      }}></Button>
+                      <Input type="text" value={color}/>
+                      <Input type='color' onChange={(e)=>{setColor(e.target.value)}} hidden ref={ColorInputClick}/>
+                    </Label>
+                </div>
               </Field>
               <Field>
-                <FieldLabel htmlFor="checkout-7j9-card-number-uw1">
-                  Company address
-                </FieldLabel>
-                <Textarea
-                  id="checkout-7j9-card-number-uw1"
-                  placeholder="1234 Main St"
-                  className="resize-none"
-                />
+                <div className="flex items-center gap-3">
+                  <div className="flex flex-col gap-2">
+                  <FieldLabel htmlFor="checkout-7j9-card-number-uw1">
+                  Invoice Prefix
+                  </FieldLabel>
+                  <Input type="text"/>
+                  </div>
+                  
+                  <div className="flex flex-col gap-2">
+                  <FieldLabel htmlFor="checkout-7j9-card-number-uw1">
+                  Invoice Number
+                  </FieldLabel>
+                  <Input type="text"/>
+                  </div>
+                </div>
+              </Field>
+
+              {/* Due Dates */}
+              <Field>
+                <div className="flex items-center gap-3">
+                  <div className="flex flex-col gap-2">
+                  <FieldLabel htmlFor="checkout-7j9-card-number-uw1">
+                  Invoice Prefix
+                  </FieldLabel>
+                  <Calendar28/>
+                  </div>
+                  
+                  <div className="flex flex-col gap-2">
+                  <FieldLabel htmlFor="checkout-7j9-card-number-uw1">
+                  Invoice Number
+                  </FieldLabel>
+                  <Input type="text"/>
+                  </div>
+                </div>
               </Field>
             </FieldSet>
           </FieldGroup>
