@@ -1,3 +1,5 @@
+"use client"
+
 import {
   Field,
   FieldGroup,
@@ -21,9 +23,78 @@ import {
 import { Textarea } from "@/components/ui/textarea"
 import { FileImage } from "lucide-react"
 import { Label } from "@radix-ui/react-label"
+import { useState } from "react"
+import PDFViewer from "../pdf/PDFViewer"
+
+
+// Hardcoded values for form
+const initialInvoiceData = {
+  invoiceNumber: "INV-0001",
+  serialNumber: "0001",
+  date: "2025-10-29", // Use YYYY-MM-DD for date inputs
+  currency: "USD",
+  billedBy: {
+    name: "Invoicely Ltd",
+    address: "123 Main St, Anytown, USA",
+  },
+  billedTo: {
+    name: "John Doe",
+    address: "456 Second St, Anytown, USA",
+  },
+  items: [
+    { id: 1, name: "Web Design Services", qty: 1, price: 1200, total: 1200 },
+    { id: 2, name: "Hosting (1 Year)", qty: 1, price: 150, total: 150 },
+    { id: 3, name: "Web Design Services", qty: 1, price: 1200, total: 1200 },
+    { id: 4, name: "Hosting (1 Year)", qty: 1, price: 150, total: 150 },
+    { id: 5, name: "Web Design Services", qty: 1, price: 1200, total: 1200 },
+    { id: 6, name: "Hosting (1 Year)", qty: 1, price: 150, total: 150 },
+  ],
+  // You can add fields for logo, signature, etc. here
+  companyLogo: "https://shorthand.com/the-craft/raster-images/assets/5kVrMqC0wp/sh-unsplash_5qt09yibrok-4096x2731.jpeg",
+  companySignature: null,
+};
+
 
 export function CreateForm() {
+
+  // -------------------- Static Data for PDF
+
+  const [invoiceData, setInvoiceData] = useState(initialInvoiceData);
+
+  // --- Handlers for "Billed By" (Accordion 1) ---
+  const handleBilledByName = (e) => {
+    setInvoiceData(prev => ({
+      ...prev,
+      billedBy: { ...prev.billedBy, name: e.target.value }
+    }));
+  };
+  const handleBilledByAddress = (e) => {
+    setInvoiceData(prev => ({
+      ...prev,
+      billedBy: { ...prev.billedBy, address: e.target.value }
+    }));
+  };
+  
+  // --- Handlers for "Billed To" (Accordion 2) ---
+  // (Assuming "Shipping Details" means "Billed To")
+  const handleBilledToName = (e) => {
+    setInvoiceData(prev => ({
+      ...prev,
+      billedTo: { ...prev.billedTo, name: e.target.value }
+    }));
+  };
+  const handleBilledToAddress = (e) => {
+    setInvoiceData(prev => ({
+      ...prev,
+      billedTo: { ...prev.billedTo, address: e.target.value }
+    }));
+  };
+
+  // --------------------------------- Static Data End
+
   return (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-4 md:p-8 min-h-screen">
+    <div className="p-4 md:p-6 rounded-lg shadow-sm h-fit">
     <Accordion
       type="single"
       collapsible
@@ -168,5 +239,15 @@ export function CreateForm() {
         </AccordionContent>
       </AccordionItem>
     </Accordion>
+    </div>
+
+    <div>
+        {/* Pass the entire state object down as a prop.
+          The PDFViewer will now re-render whenever invoiceData changes.
+        */}
+        <PDFViewer invoiceData={invoiceData} />
+      </div>
+      </div>
+
   )
 }
