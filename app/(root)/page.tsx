@@ -1,3 +1,4 @@
+import { FooterText } from '@/components/shared/Footer'
 import Hero from '@/components/shared/Hero'
 import Nav from '@/components/shared/Nav'
 
@@ -7,6 +8,9 @@ const page = () => {
       <Nav/>
       <div>
         <Hero/>
+      </div>
+      <div className='border-2 border-t-0 border-dashed'>
+        <FooterText/>
       </div>
     </div>
   )
