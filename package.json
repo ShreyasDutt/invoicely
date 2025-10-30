@@ -23,6 +23,7 @@
     "clsx": "^2.1.1",
     "currency-symbol-map": "^5.1.0",
     "date-fns": "^4.1.0",
+    "jotai": "^2.15.0",
     "jspdf": "^3.0.3",
     "lucide-react": "^0.548.0",
     "mongoose": "^8.19.2",

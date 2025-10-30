@@ -19,7 +19,7 @@ function formatDate(date: Date | undefined) {
 
   return date.toLocaleDateString("en-US", {
     day: "2-digit",
-    month: "long",
+    month: "short",
     year: "numeric",
   })
 }
@@ -31,13 +31,20 @@ function isValidDate(date: Date | undefined) {
   return !isNaN(date.getTime())
 }
 
-export function Calendar28() {
+type Calendar28Props = {
+  CurrentDate: Date | null
+  onChange?: (val: Date | undefined) => void
+}
+
+export function Calendar28({ CurrentDate, onChange }: Calendar28Props) {
   const [open, setOpen] = React.useState(false)
   const [date, setDate] = React.useState<Date | undefined>(
-    new Date()
+    CurrentDate ?? undefined
   )
   const [month, setMonth] = React.useState<Date | undefined>(date)
   const [value, setValue] = React.useState(formatDate(date))
+
+
 
   return (
     <div className="flex flex-col gap-3">
@@ -45,7 +52,7 @@ export function Calendar28() {
         <Input
           id="date"
           value={value}
-          placeholder="June 01, 2025"
+          placeholder="Pick a date"
           className="bg-background pr-10 text-sm"
           onChange={(e) => {
             const date = new Date(e.target.value)   
@@ -82,13 +89,13 @@ export function Calendar28() {
             <Calendar
               mode="single"
               selected={date}
-              captionLayout="dropdown"
               month={month}
               onMonthChange={setMonth}
               onSelect={(date) => {
                 setDate(date)
                 setValue(formatDate(date))
                 setOpen(false)
+                onChange?.(date)
               }}
             />
           </PopoverContent>

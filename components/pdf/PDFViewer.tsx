@@ -1,158 +1,79 @@
-"use client"
+import React from 'react'
 
-import styles from './PDFViewer.module.css'
-
-// Define types (reuse from your form if available)
-type PersonInfo = {
-  name: string
-  address: string
-}
-
-type Item = {
-  id: number
-  name: string
-  qty: number
-  price: number
-  total: number
-}
-
-export type InvoiceData = {
-  invoiceNumber: string
-  serialNumber: string
-  date: string
-  currency: string
-  billedBy: PersonInfo
-  billedTo: PersonInfo
-  items: Item[]
-  companyLogo?: string
-  companySignature?: string
-}
-
-// Props for PDFViewer
-type PDFViewerProps = {
-  invoiceData: InvoiceData
-  isDarkMode: boolean
-}
-
-// Simple number-to-words placeholder
-const numberToWords = (num: number): string => {
-  if (num === 0) return "zero"
-  return "a non-zero amount"
-}
-
-const PDFViewer: React.FC<PDFViewerProps> = ({ invoiceData, isDarkMode }) => {
-
-  if (!invoiceData) {
-    return <div>Loading preview...</div>
-  }
-
-  const subtotal = invoiceData.items.reduce((acc, item) => acc + item.total, 0)
-  const total = subtotal
-  const totalInWords = numberToWords(total)
-
+const PDFViewer = () => {
   return (
-    <div className={`${styles.invoice} ${isDarkMode ? styles.darkMode : ''}`}>
+    <div className="max-w-4xl mx-auto border font-mono">
+      {/* Invoice Header */}
+      <div className="border-b p-6">
+        <h1 className="text-4xl font-bold">Invoice INV-0001</h1>
+      </div>
       
-      {/* Header & Meta Info */}
-      <div className={styles.invoiceHeader}>
-        <h1>Invoice</h1>
-        <span className={styles.invoiceNumber}>{invoiceData.invoiceNumber}</span>
+      {/* Invoice Details */}
+      <div className="border-b p-6">
+        <div className="flex gap-32">
+          <div className="flex gap-12">
+            <span>Serial Number</span>
+            <span>0001</span>
+          </div>
+        </div>
+        <div className="flex gap-32 mt-2">
+          <div className="flex gap-32">
+            <span>Date</span>
+            <span>30/10/2025</span>
+          </div>
+        </div>
+        <div className="flex gap-32 mt-2">
+          <div className="flex gap-23">
+            <span>Currency</span>
+            <span>USD</span>
+          </div>
+        </div>
       </div>
 
-      <div className={styles.metaInfo}>
-        <div>
-          <p><strong>Serial Number</strong></p>
-          <p>{invoiceData.serialNumber}</p>
+      {/* Billed By and Billed To */}
+      <div className="grid grid-cols-2 border-b">
+        <div className="border-r p-6">
+          <h3 className="mb-3">Billed By</h3>
+          <p className="font-semibold">Invox</p>
+          <p>Abbotsford,CA</p>
         </div>
-        <div>
-          <p><strong>Date</strong></p>
-          <p>{new Date(invoiceData.date).toLocaleDateString()}</p>
-        </div>
-        <div>
-          <p><strong>Currency</strong></p>
-          <p>{invoiceData.currency}</p>
-        </div>
-      </div>
-
-      {/* Billing Info */}
-      <div className={styles.billingInfo}>
-        <div>
-          <h4 className={styles.billingTitle}>Billed By</h4>
-          {invoiceData.companyLogo && (
-            <img 
-              src={invoiceData.companyLogo} 
-              alt="Company Logo" 
-              className={styles.companyLogo} 
-              onError={(e) => (e.currentTarget.style.display = 'none')}
-            />
-          )}
-          <p>{invoiceData.billedBy.name}</p>
-          <p>{invoiceData.billedBy.address}</p>
-        </div>
-        <div>
-          <h4 className={styles.billingTitle}>Billed To</h4>
-          <p>{invoiceData.billedTo.name}</p>
-          <p>{invoiceData.billedTo.address}</p>
+        <div className="p-6">
+          <h3 className="mb-3">Billed To</h3>
+          <p className="font-semibold">John Doe</p>
+          <p>456 Second St, Anytown, USA</p>
         </div>
       </div>
 
       {/* Items Table */}
-      <table className={styles.itemsTable}>
-        <thead>
-          <tr className={styles.itemsHeader}>
-            <th>Item</th>
-            <th>Qty</th>
-            <th>Price</th>
-            <th>Total</th>
-          </tr>
-        </thead>
-        <tbody>
-          {invoiceData.items.map(item => (
-            <tr key={item.id}>
-              <td>{item.name}</td>
-              <td>{item.qty}</td>
-              <td>${item.price.toFixed(2)}</td>
-              <td>${item.total.toFixed(2)}</td>
-            </tr>
-          ))}
-          <tr className={styles.emptyRow}>
-            <td colSpan={4}></td>
-          </tr>
-        </tbody>
-      </table>
-
-      {/* Totals */}
-      <div className={styles.totalsSection}>
-        <div className={styles.totalsRow}>
-          <span className={styles.totalsLabel}>Subtotal</span>
-          <span className={styles.totalsValue}>${subtotal.toFixed(2)}</span>
+      <div>
+        <div className="grid grid-cols-12 border-b">
+          <div className="col-span-6 p-4 border-r">Item</div>
+          <div className="col-span-2 p-4 border-r text-center">Qty</div>
+          <div className="col-span-2 p-4 border-r text-right">Price</div>
+          <div className="col-span-2 p-4 text-right">Total</div>
         </div>
         
-        <hr className={styles.totalsDivider} />
-        
-        <div className={`${styles.totalsRow} ${styles.grandTotal}`}>
-          <span className={styles.totalsLabel}>Total</span>
-          <span className={styles.totalsValue}>${total.toFixed(2)}</span>
-        </div>
-        
-        <div className={styles.totalInWords}>
-          <p>Invoice Total (in words)</p>
-          <p>{totalInWords}</p>
-        </div>
+        {/* Empty space */}
+        <div className="h-96 border-b"></div>
       </div>
 
-      {/* Signature */}
-      {invoiceData.companySignature && (
-        <div className={styles.signatureSection}>
-          <img 
-            src={invoiceData.companySignature} 
-            alt="Signature" 
-            className={styles.companySignature} 
-            onError={(e) => (e.currentTarget.style.display = 'none')}
-          />
-          <p>Authorized Signature</p>
+      {/* Totals Section */}
+      <div className="grid grid-cols-2">
+        <div></div>
+        <div className="border-l">
+          <div className="flex justify-between p-4 border-b">
+            <span>Subtotal</span>
+            <span>$0.00</span>
+          </div>
+          <div className="flex justify-between p-4 border-b">
+            <span className="font-bold">Total</span>
+            <span className="font-bold">$0.00</span>
+          </div>
+          <div className="p-4">
+            <p className="text-sm">Total </p>
+          </div>
         </div>
-      )}
+      </div>
     </div>
   )
 }
