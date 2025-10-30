@@ -1,4 +1,3 @@
-"use client"
 import {
   Field,
   FieldGroup,
@@ -22,49 +21,11 @@ import {
 import { Textarea } from "@/components/ui/textarea"
 import { FileImage } from "lucide-react"
 import { Label } from "@radix-ui/react-label"
-import getSymbolFromCurrency from "currency-symbol-map"
-import { useRef, useState } from "react"
-import { Button } from "../ui/button"
-import { Calendar28 } from "./DatePicker"
 
 export function CreateForm() {
-
-  const [color, setColor] = useState('#0080ff');
-  const ColorInputClick = useRef<HTMLInputElement>(null)
-
-const currencies = [
-  "USD", // US Dollar
-  "EUR", // Euro
-  "GBP", // British Pound
-  "INR", // Indian Rupee
-  "CAD", // Canadian Dollar
-  "AUD", // Australian Dollar
-  "JPY", // Japanese Yen
-  "CHF", // Swiss Franc
-  "CNY", // Chinese Yuan
-  "NZD", // New Zealand Dollar
-  "SGD", // Singapore Dollar
-  "HKD", // Hong Kong Dollar
-  "SEK", // Swedish Krona
-  "NOK", // Norwegian Krone
-  "DKK", // Danish Krone
-  "MXN", // Mexican Peso
-  "BRL", // Brazilian Real
-  "ZAR", // South African Rand
-  "RUB", // Russian Ruble
-  "TRY", // Turkish Lira
-  "KRW", // South Korean Won
-  "IDR", // Indonesian Rupiah
-  "MYR", // Malaysian Ringgit
-  "PHP", // Philippine Peso
-  "THB", // Thai Baht
-  "SAR", // Saudi Riyal
-  "AED", // UAE Dirham
-  "PLN", // Polish Zloty
-];
-
-
   return (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-4 md:p-8 min-h-screen">
+    <div className="p-4 md:p-6 rounded-lg shadow-sm h-fit">
     <Accordion
       type="single"
       collapsible
@@ -261,5 +222,18 @@ const currencies = [
         </AccordionContent>
       </AccordionItem>
     </Accordion>
+    </div>
+
+    <div>
+        {/* Pass the entire state object down as a prop.
+          The PDFViewer will now re-render whenever invoiceData changes.
+        */}
+        <PDFViewer invoiceData={invoiceData} 
+
+        // Passing in Dark mode
+        isDarkMode={false} />
+      </div>
+      </div>
+
   )
 }
