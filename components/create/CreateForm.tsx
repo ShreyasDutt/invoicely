@@ -26,13 +26,20 @@ import { useRef, useState } from "react"
 import { Button } from "../ui/button"
 import { Calendar28 } from "./DatePicker"
 import { Badge } from "../ui/badge"
+import { useAtom } from "jotai"
+import { invoiceAtom } from "@/lib/store"
 
 
 
 export function CreateForm() {
-  const [color, setColor] = useState('#0080ff');
+  const [invoiceData, setinvoiceData] = useAtom(invoiceAtom);
   const ColorInputClick = useRef<HTMLInputElement>(null)
+  
 
+  enum Mode {
+  Light = "light",
+  Dark = "dark",
+}
   const currencies = ["USD", "EUR", "GBP", "INR", "CAD", "AUD", "JPY", "CHF", "CNY", "NZD", "SGD", "HKD", "SEK", "NOK", "DKK", "MXN", "BRL", "ZAR", "RUB", "TRY", "KRW", "IDR", "MYR", "PHP", "THB", "SAR", "AED", "PLN"];
   return (
 
@@ -75,22 +82,32 @@ export function CreateForm() {
 
           <FieldSet>
               <Field>
-                <FieldLabel htmlFor="checkout-7j9-card-name-43j">
+                <FieldLabel>
                   Company Name
                 </FieldLabel>
                 <Input
-                  id="checkout-7j9-card-name-43j"
                   placeholder="Invox"
                   required
+                  value={invoiceData.billedBy.name}
+                  onChange={(e)=>{
+                    setinvoiceData({...invoiceData, billedBy:{
+                      ...invoiceData.billedBy, name: e.target.value
+                    }})
+                  }}
                 />
               </Field>
               <Field>
-                <FieldLabel htmlFor="checkout-7j9-card-number-uw1">
+                <FieldLabel>
                   Company Address
                 </FieldLabel>
                 <Textarea
-                  id="checkout-7j9-card-number-uw1"
                   placeholder="1234 Main St"
+                  value={invoiceData.billedBy.address}
+                  onChange={(e)=>{
+                    setinvoiceData({...invoiceData, billedBy:{
+                      ...invoiceData.billedBy, address: e.target.value
+                    }})
+                  }}
                   className="resize-none"
                 />
               </Field>
@@ -106,22 +123,32 @@ export function CreateForm() {
           <FieldGroup>
             <FieldSet>
               <Field>
-                <FieldLabel htmlFor="checkout-7j9-card-name-43j">
+                <FieldLabel>
                   Client Name
                 </FieldLabel>
                 <Input
-                  id="checkout-7j9-card-name-43j"
+                  value={invoiceData.billedTo.name}
+                  onChange={(e)=>{
+                    setinvoiceData({...invoiceData, billedTo:{
+                      ...invoiceData.billedTo, name: e.target.value
+                    }})
+                  }}
                   placeholder="John Doe"
                   required
                 />
               </Field>
               <Field>
-                <FieldLabel htmlFor="checkout-7j9-card-number-uw1">
+                <FieldLabel>
                   Client Address
                 </FieldLabel>
                 <Textarea
-                  id="checkout-7j9-card-number-uw1"
+                  value={invoiceData.billedTo.address}
                   placeholder="1234 Second St"
+                  onChange={(e)=>{
+                    setinvoiceData({...invoiceData, billedTo:{
+                      ...invoiceData.billedTo, address: e.target.value
+                    }})
+                  }}
                   className="resize-none"
                 />
               </Field>
@@ -137,12 +164,16 @@ export function CreateForm() {
       <FieldSet className="w-full">
         {/* Company and style settings */}
         <Field>
-          <FieldLabel htmlFor="checkout-7j9-card-name-43j">
-            Company name
+          <FieldLabel>
+            Invoice Settings
           </FieldLabel>
           <div className="flex flex-col md:flex-row md:items-center gap-3">
             {/* Currency Select */}
-            <Select defaultValue="USD">
+            <Select defaultValue={invoiceData.currency} onValueChange={(val)=>{
+              if (currencies.includes(val)) {
+                setinvoiceData({...invoiceData, currency: val})
+              }
+            }}>
               <SelectTrigger className="w-full md:w-36">
                 <SelectValue placeholder="Select currency" />
               </SelectTrigger>
@@ -156,7 +187,11 @@ export function CreateForm() {
             </Select>
 
             {/* Theme Select */}
-            <Select defaultValue="light">
+            <Select defaultValue={invoiceData.mode} onValueChange={(val) => {
+              if (val === Mode.Light || val === Mode.Dark) {
+                setinvoiceData({ ...invoiceData, mode: val })
+              }
+            }}>
               <SelectTrigger className="w-full md:w-32">
                 <SelectValue placeholder="Select theme" />
               </SelectTrigger>
@@ -169,16 +204,30 @@ export function CreateForm() {
             {/* Color Picker */}
             <Label className="flex items-center gap-2 w-full md:w-auto">
               <Button
+                type="button"
                 className="rounded-md w-8 h-8"
-                style={{ backgroundColor: color }}
+                style={{ backgroundColor: invoiceData.AccentColor }}
                 onClick={() => {
-                  ColorInputClick.current?.click();
+                  ColorInputClick.current?.click()
                 }}
               ></Button>
-              <Input className="w-full md:w-[150px]" type="text" value={color} readOnly />
+
+              <Input
+                className="w-full md:w-[150px]"
+                type="text"
+                value={invoiceData.AccentColor}
+                readOnly
+              />
+
               <Input
                 type="color"
-                onChange={(e) => setColor(e.target.value)}
+                value={invoiceData.AccentColor}
+                onChange={(e) => {
+                  setinvoiceData({
+                    ...invoiceData,
+                    AccentColor: e.target.value,
+                  })
+                }}
                 hidden
                 ref={ColorInputClick}
               />
@@ -191,11 +240,19 @@ export function CreateForm() {
           <div className="flex flex-col md:flex-row md:items-start gap-3 w-full">
             <div className="flex flex-col gap-2 w-full md:w-1/2">
               <FieldLabel>Invoice Prefix</FieldLabel>
-              <Input type="text" className="w-full" />
+              <Input type="text" className="w-full" value={invoiceData.InvoicePrefix}
+                onChange={(e)=>{
+                  setinvoiceData({...invoiceData, InvoicePrefix: e.target.value})
+                }}
+              />
             </div>
             <div className="flex flex-col gap-2 w-full md:w-1/2">
               <FieldLabel>Invoice Number</FieldLabel>
-              <Input type="text" className="w-full" />
+              <Input type="text" className="w-full" value={invoiceData.InvoiceNumber} 
+                onChange={(e)=>{
+                  setinvoiceData({...invoiceData, InvoiceNumber: e.target.value})
+                }}
+              />
             </div>
           </div>
         </Field>
@@ -205,11 +262,19 @@ export function CreateForm() {
           <div className="flex flex-col md:flex-row md:items-start gap-3 w-full">
             <div className="flex flex-col gap-2 w-full md:w-1/2">
               <FieldLabel>Invoice Date</FieldLabel>
-              <Calendar28 CurrentDate={new Date()} />
+              <Calendar28 CurrentDate={(invoiceData.date)} 
+                onChange={(date)=>{
+                  setinvoiceData({...invoiceData, date: date ?? new Date()})
+                }}
+              />
             </div>
             <div className="flex flex-col gap-2 w-full md:w-1/2">
               <FieldLabel>Due Date</FieldLabel>
-              <Calendar28 CurrentDate={null} />
+              <Calendar28 CurrentDate={invoiceData.dueDate} 
+                onChange={(date)=>{
+                  setinvoiceData({...invoiceData, dueDate: date ?? null})
+                }}
+              />
             </div>
           </div>
         </Field>
@@ -219,7 +284,11 @@ export function CreateForm() {
           <FieldLabel className="flex items-center gap-2">
             Payment Terms <Badge variant={"outline"}>optional</Badge>
           </FieldLabel>
-          <Input type="text" placeholder="50% payment due" className="w-full" />
+          <Input type="text" placeholder="50% payment due" className="w-full"  value={invoiceData.paymentTerms}
+            onChange={(e)=>{
+              setinvoiceData({...invoiceData, paymentTerms: e.target.value})
+            }}
+          />
         </Field>
       </FieldSet>
     </FieldGroup>
@@ -238,14 +307,22 @@ export function CreateForm() {
                         <FieldLabel className="flex items-center">
                           Notes <Badge variant={'outline'}>optional</Badge>
                         </FieldLabel>
-                        <Textarea placeholder="Any relevent Information that's not already covered" className="resize-none"/>
+                        <Textarea placeholder="Any relevent Information that's not already covered" className="resize-none" value={invoiceData.notes ?? ""}
+                          onChange={(e)=>{
+                            setinvoiceData({...invoiceData, notes: e.target.value})
+                          }}
+                        />
                       </Field>
 
                       <Field>
                         <FieldLabel className="flex items-center">
                           Terms <Badge variant={'outline'}>optional</Badge>
                         </FieldLabel>
-                        <Textarea placeholder="Any Terms and Conditions" className="resize-none"/>
+                        <Textarea placeholder="Any Terms and Conditions" className="resize-none" value={invoiceData.TermsAndConditions ?? ""} 
+                          onChange={(e)=>{
+                            setinvoiceData({...invoiceData, TermsAndConditions: e.target.value})
+                          }}
+                        />
                       </Field>
                     </FieldSet>
                   </FieldGroup>

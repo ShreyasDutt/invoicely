@@ -28,8 +28,8 @@ export type InvoiceData = {
   AccentColor: string
   InvoicePrefix: string
   InvoiceNumber: string
-  date: string
-  dueDate: string
+  date: Date
+  dueDate: Date | null
   paymentTerms?: string
   notes?: string
   TermsAndConditions?: string
@@ -40,13 +40,13 @@ export type InvoiceData = {
 export const invoiceAtom = atom<InvoiceData>({
   InvoiceNumber: "0001",
   InvoicePrefix: "INV",
-  date: (new Date().toLocaleString()),
-  dueDate: "",
+  date: (new Date()),
+  dueDate: null,
   currency: "USD",
   mode: Mode.Light,
   AccentColor: "#0080ff",
-  billedBy: { name: "Invoicely Ltd", address: "123 Main St" },
-  billedTo: { name: "John Doe", address: "456 Second St" },
+  billedBy: { name: "Invox", address: "Abbotsford, CA" },
+  billedTo: { name: "John Doe", address: "123 Main St, USA" },
   items: [
     { id: 1, name: "Web Design", qty: 1, price: 1200, total: 1200 }
   ],
