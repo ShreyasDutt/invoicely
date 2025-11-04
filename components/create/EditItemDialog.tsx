@@ -14,49 +14,56 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { invoiceAtom } from "@/lib/store"
 import { useAtom } from "jotai"
+import { Edit } from "lucide-react"
 import { useRef, useState } from "react"
 import { toast } from "sonner"
 
-export function AddItemDialog() {
 
-    const [ItemName, setItemName] = useState('');
-    const [ItemDescription, setItemDescription] = useState('');
-    const [Quantity, setQuantity] = useState('');
-    const [UnitPrice, setUnitPrice] = useState('');
+
+export function EditItemDialog({index}:{index:number}) {
+
     const [invoiceData, setinvoiceData] = useAtom(invoiceAtom);
+    const item = invoiceData.items[index];
+    const [ItemName, setItemName] = useState(item.name);
+    const [ItemDescription, setItemDescription] = useState(item.description);
+    const [Quantity, setQuantity] = useState(item.qty.toString());
+    const [UnitPrice, setUnitPrice] = useState(item.price.toString());
+
+
     const btnRef = useRef<HTMLButtonElement>(null);
     
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) =>{
         e.preventDefault();
-        const newItem = {
-            id: invoiceData.items.length + 1,
+        const EditedItem = {
+            id: index,
             name: ItemName,
             description: ItemDescription,
             qty: Number(Quantity),
             price: Number(UnitPrice),
             total: Number(Quantity) * Number(UnitPrice)
         }
-        setinvoiceData({...invoiceData,items:[...invoiceData.items,newItem]})
+        setinvoiceData({
+        ...invoiceData,
+        items: invoiceData.items.map((item, i) =>
+            i === index ? EditedItem : item
+        ),
+        });
         
-        setItemName('');
-        setItemDescription('');
-        setQuantity('');
-        setUnitPrice('');
-        toast.success('Item added successfully');
+        toast.success('Item edited successfully');
         btnRef.current?.click();
     }
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">Add Item</Button>
+        <Button size="sm" variant="outline"><Edit className="h-4 w-4" /></Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle className="text-xl">Add Item</DialogTitle>
+            <DialogTitle className="text-xl">Edit Item</DialogTitle>
             <DialogDescription className="text-sm">
-              Add an item to the invoice
+              Edit an item to the invoice
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-6 py-4">
@@ -132,7 +139,7 @@ export function AddItemDialog() {
             <DialogClose asChild>
               <Button variant="outline" type="button" ref={btnRef}>Cancel</Button>
             </DialogClose>
-            <Button type="submit">Save Item</Button>
+            <Button type="submit">Edit Item</Button>
           </DialogFooter>
         </form>
       </DialogContent>

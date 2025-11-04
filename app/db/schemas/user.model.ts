@@ -6,6 +6,7 @@ export interface UserInterface extends Document {
     clerkId:string,
     email:string,
     username:string,
+    photos:[mongoose.Types.ObjectId],
     createdAt:Date,
     updatedAt:Date
 }
@@ -32,6 +33,11 @@ const UserSchema = new Schema<UserInterface>({
         type:String,
         required:true
     }
+    ,
+    photos:[{
+        type:Schema.Types.ObjectId,
+        ref:'Photo'
+    }]
 },{
     timestamps:true
 })

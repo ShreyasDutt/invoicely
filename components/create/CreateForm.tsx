@@ -30,6 +30,7 @@ import { useAtom } from "jotai"
 import { invoiceAtom } from "@/lib/store"
 import { AddItemDialog } from "./AddItemDialog"
 import { Edit, Trash2 } from "lucide-react"
+import { EditItemDialog } from "./EditItemDialog"
 
 
 
@@ -319,9 +320,7 @@ export function CreateForm() {
                               </div>
                               <div className="flex flex-col items-end gap-3">
                                 <div className="flex gap-2">
-                                  <Button size="sm" variant="outline">
-                                    <Edit className="h-4 w-4" />
-                                  </Button>
+                                  <EditItemDialog index={item.id} />
                                   <Button size="sm" variant="outline" onClick={()=>{
                                     invoiceData.items.splice(index,1)
                                     setinvoiceData({...invoiceData})
