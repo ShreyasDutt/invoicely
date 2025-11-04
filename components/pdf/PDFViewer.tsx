@@ -58,8 +58,8 @@ const PDFViewer = () => {
         </div>
 
 
-        {invoiceData.items.map((item) => (
-          <div key={item.id} className="grid grid-cols-12 border-b">
+        {invoiceData.items.map((item,index) => (
+          <div key={index} className="grid grid-cols-12 border-b">
             <div className="col-span-6 p-4 border-r">{item.name}</div>
             <div className="col-span-2 p-4 border-r text-center">{item.qty}</div>
             <div className="col-span-2 p-4 border-r text-right">

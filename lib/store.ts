@@ -6,8 +6,8 @@ export type PersonInfo = {
 }
 
 export type Item = {
-  id: number
   name: string
+  description: string
   qty: number
   price: number
   total: number
@@ -47,9 +47,13 @@ export const invoiceAtom = atom<InvoiceData>({
   AccentColor: "#0080ff",
   billedBy: { name: "Invox", address: "Abbotsford, CA" },
   billedTo: { name: "John Doe", address: "123 Main St, USA" },
-  items: [
-    { id: 1, name: "Web Design", qty: 1, price: 1200, total: 1200 }
-  ],
+  items: [{
+    name: "Item 1",
+    description: "Description of Item 1",
+    qty: 2,
+    price: 100,
+    total: 200
+  }],
   companyLogo: "",
   companySignature: ""
 })

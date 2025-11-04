@@ -22,12 +22,14 @@ import {
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@radix-ui/react-label"
 import getSymbolFromCurrency from "currency-symbol-map"
-import { useRef, useState } from "react"
+import { useRef } from "react"
 import { Button } from "../ui/button"
 import { Calendar28 } from "./DatePicker"
 import { Badge } from "../ui/badge"
 import { useAtom } from "jotai"
 import { invoiceAtom } from "@/lib/store"
+import { AddItemDialog } from "./AddItemDialog"
+import { Edit, Trash2 } from "lucide-react"
 
 
 
@@ -295,8 +297,56 @@ export function CreateForm() {
   </AccordionContent>
 </AccordionItem>
 
+<AccordionItem value="item-4">
+        <AccordionTrigger>
+          Invoice Items
+        </AccordionTrigger>
+        <AccordionContent>
+                  <FieldGroup>
+                    <FieldSet>
+                      <Field className={`${invoiceData.items.length > 0 ? 'block' : 'hidden'}`}>
+                        
+                        {invoiceData.items.map((item,index)=>{
+                          // console.log(item);
+                          return(
+                            <div key={index} className={`flex items-start justify-between gap-4 p-4 rounded-lg border bg-card`}>
+                              <div className="flex-1 space-y-1">
+                                <h3 className="font-semibold text-base">{item.name}</h3>
+                                <p className="text-sm text-muted-foreground">{item.description}</p>
+                                <p className="text-sm font-medium mt-2">
+                                  {item.qty} × {getSymbolFromCurrency(invoiceData.currency)}{item.price}
+                                </p>
+                              </div>
+                              <div className="flex flex-col items-end gap-3">
+                                <div className="flex gap-2">
+                                  <Button size="sm" variant="outline">
+                                    <Edit className="h-4 w-4" />
+                                  </Button>
+                                  <Button size="sm" variant="outline" onClick={()=>{
+                                    invoiceData.items.splice(index,1)
+                                    setinvoiceData({...invoiceData})
+                                  }}>
+                                    <Trash2 className="h-4 w-4" />
+                                  </Button>
+                                </div>
+                                <p></p>
+                                <p>
+                                  Total: {getSymbolFromCurrency(invoiceData.currency)}{item.total}
+                                </p>
+                              </div>
+                            </div>
+                          )
+                        })}
+                      </Field>
+                      <Field>
+                        <AddItemDialog/>
+                      </Field>
+                    </FieldSet>
+                  </FieldGroup>
+        </AccordionContent>
+      </AccordionItem>
 
-      <AccordionItem value="item-4">
+      <AccordionItem value="item-5">
         <AccordionTrigger>
           Additonal Information
         </AccordionTrigger>

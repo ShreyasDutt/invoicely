@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/shared/theme-provider";
 import { ClerkProvider } from "@clerk/nextjs";
 import { shadcn } from "@clerk/themes";
+import { Toaster } from "sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -43,7 +44,12 @@ export default function RootLayout({
             enableSystem
           >
             {children}
+            <Toaster
+            position="top-center"
+            theme="system"
+            />
           </ThemeProvider>
+          
       </body>
       </html>
     </ClerkProvider>
