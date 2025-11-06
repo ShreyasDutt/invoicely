@@ -31,6 +31,7 @@ import { invoiceAtom } from "@/lib/store"
 import { AddItemDialog } from "./AddItemDialog"
 import { Edit, Trash2 } from "lucide-react"
 import { EditItemDialog } from "./EditItemDialog"
+import { CreateSignatureSidebar } from "./createSignatureSidebar"
 
 
 
@@ -74,12 +75,7 @@ export function CreateForm() {
           <FieldLabel>
             Company Signature
           </FieldLabel> 
-                <Input 
-                  id="picture" 
-                  type="file"
-                  accept="image/*"
-                  className=""
-                />
+                <CreateSignatureSidebar/>
         </FieldSet>
         
 
@@ -320,7 +316,7 @@ export function CreateForm() {
                               </div>
                               <div className="flex flex-col items-end gap-3">
                                 <div className="flex gap-2">
-                                  <EditItemDialog index={item.id} />
+                                  <EditItemDialog index={index} />
                                   <Button size="sm" variant="outline" onClick={()=>{
                                     invoiceData.items.splice(index,1)
                                     setinvoiceData({...invoiceData})

@@ -1,6 +1,7 @@
 import mongoose,{Schema,Document} from "mongoose";
 
 export interface UserInterface extends Document {
+    _id:mongoose.Types.ObjectId,
     firstName:string,
     lastName:string,
     clerkId:string,

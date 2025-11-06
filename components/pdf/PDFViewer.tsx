@@ -7,9 +7,7 @@ const PDFViewer = () => {
   const [invoiceData, setinvoiceData] = useAtom(invoiceAtom);
   const subtotal = invoiceData.items.reduce((sum, item) => sum + item.total, 0);
   const isDark = invoiceData.mode === 'dark';
-  
-  console.log(invoiceData.mode);
-  
+    
   return (
     <div className={`max-w-4xl mx-auto border font-mono ${isDark ? 'bg-black text-white border-white' : 'bg-white text-black'}`}>
       {/* Invoice Header */}
