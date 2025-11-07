@@ -9,17 +9,17 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { BrushCleaning, MoonIcon, SunMedium } from "lucide-react"
-import { RefObject, useRef, useState } from "react"
+import { Eraser, Moon, Sun, Pencil } from "lucide-react"
+import { useRef, useState } from "react"
 import SignatureCanvas from "react-signature-canvas"
 
-export function CreateSignDialog({onSave}:{onSave?:(dataUrl:string )=>void}) {
-    const [dark, setdark] = useState<boolean>(false);
-    const [show, setshow] = useState(false);
-    const sigCanvas = useRef<SignatureCanvas>(null);
-    const closeBtnRef = useRef<HTMLButtonElement>(null);
-
-    const save = () => {
+export function CreateSignDialog({onSave}:{onSave?:(dataUrl:string)=>void}) {
+  const [dark, setdark] = useState<boolean>(false);
+  const [show, setshow] = useState(false);
+  const sigCanvas = useRef<SignatureCanvas>(null);
+  const closeBtnRef = useRef<HTMLButtonElement>(null);
+  
+  const save = () => {
     if (!sigCanvas.current) return;
     const trimmedCanvas = sigCanvas.current.getTrimmedCanvas();
     const ctx = trimmedCanvas.getContext("2d");
@@ -31,65 +31,94 @@ export function CreateSignDialog({onSave}:{onSave?:(dataUrl:string )=>void}) {
     if (onSave) onSave(dataURL);
     closeBtnRef.current?.click();
     setshow(false);
-    }
-
-      const clear = () =>{
-        sigCanvas.current?.clear();
-        setshow(false);
-      }
+  }
+  
+  const clear = () => {
+    sigCanvas.current?.clear();
+    setshow(false);
+  }
     
   return (
     <Dialog>
       <form>
         <DialogTrigger asChild>
-          <Button variant="outline" className="w-full p-7 border-dashed">Create Signature</Button>
+          <Button 
+            variant="outline" 
+            className="w-full rounded-lg border-2 border-dashed"
+          >
+            <Pencil className="w-4 h-4 mr-2" />
+            Create Signature
+          </Button>
         </DialogTrigger>    
-        <DialogContent className="w-fit">
+        
+        <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Create Company Signature</DialogTitle>
+            <DialogTitle className="text-xl font-semibold">Create Signature</DialogTitle>
           </DialogHeader>
-          <div className={`flex items-center justify-center`}>
-            <Button
-            className={`
-                absolute top-16 right-8 bg-red-500 hover:bg-red-700
-                transition-all duration-300 ease-in-out
-                ${show ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2 pointer-events-none"}
-            `}
-            onClick={clear}
-            >
-            <BrushCleaning className="h-4 w-4" />
-            </Button>
-
-            <SignatureCanvas
-            onBegin={()=>{setshow(true)}}
-            key={dark ? "dark" : "light"} 
-            ref={sigCanvas}
-            penColor={dark ? "white" : "black"}
-            canvasProps={{
-                width: 350,
-                height: 350,
-                className: ` rounded-md cursor-pointer border border-dashed ${dark ? "bg-zinc-900" : "bg-white"}`,
-            }}
-            />
-
+          
+          <div className="relative flex items-center justify-center py-4">
+            {show && (
+              <Button
+                type="button"
+                size="sm"
+                variant="destructive"
+                className={`absolute -top-4 right-0 z-10 rounded-lg`}
+                onClick={clear}
+              >
+                <Eraser className="h-4 w-4 mr-2" />
+                Clear
+              </Button>
+            )}
+            
+            <div className="rounded-xl overflow-hidden border-2 border-dashed">
+              <SignatureCanvas
+                onBegin={() => {setshow(true)}}
+                key={dark ? "dark" : "light"} 
+                ref={sigCanvas}
+                penColor={dark ? "white" : "black"}
+                canvasProps={{
+                  width: 400,
+                  height: 250,
+                  className: `cursor-crosshair ${dark ? "bg-zinc-900" : "bg-white"}`,
+                }}
+              />
+            </div>
           </div>
-          <DialogFooter>
-            <Button variant="outline" className="transition-all duration-200" onClick={() => {setdark(!dark); setshow(false)}}>
-                <span className={`inline-block transition-all duration-300 ease-in-out ${ dark ? "opacity-0 rotate-90" : "opacity-100 rotate-0"}`}
-                >
-                    <MoonIcon className="h-4 w-4" />
-                </span>
-                <span className={`inline-block absolute transition-all duration-300 ease-in-out ${
-                    dark ? "opacity-100 rotate-0" : "opacity-0 -rotate-90"
-                    }`}
-                >
-                    <SunMedium className="h-4 w-4" />
-                </span>
+
+          
+          <DialogFooter className="gap-2 sm:gap-2">
+            <Button 
+              type="button"
+              variant="outline" 
+              size="icon"
+              className="rounded-lg"
+              onClick={() => {setdark(!dark); setshow(false)}}
+            >
+              {dark ? (
+                <Sun className="h-4 w-4" />
+              ) : (
+                <Moon className="h-4 w-4" />
+              )}
             </Button>
+            
             <DialogClose asChild>
-              <Button variant="outline" ref={closeBtnRef}>Cancel</Button>
+              <Button 
+                type="button"
+                variant="outline"
+                className="rounded-lg"
+                ref={closeBtnRef}
+              >
+                Cancel
+              </Button>
             </DialogClose>
-            <Button type="submit" onClick={save}>Upload</Button>
+            
+            <Button 
+              type="submit" 
+              className="rounded-lg"
+              onClick={save}
+            >
+              Save Signature
+            </Button>
           </DialogFooter>
         </DialogContent>
       </form>
