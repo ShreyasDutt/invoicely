@@ -5,7 +5,8 @@ import { NextRequest } from 'next/server'
 
 export async function POST(req: NextRequest) {
   try {
-    const evt = await verifyWebhook(req)
+    const evt = await verifyWebhook(req);
+    console.log("Webhook verified:", evt.type);
 
         if (evt.type === 'user.created') {
             const {id,first_name,last_name,email_addresses,username} = evt.data;

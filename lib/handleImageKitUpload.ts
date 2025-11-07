@@ -52,7 +52,7 @@ export const handleImagekitUpload = async (
 };
 
 
-export const handleSignatureFileUpload = async (fileInputRef:RefObject<HTMLInputElement>,setSigFileProgress: (progress: number) => void) => {
+export const handleFileUpload = async (fileInputRef:RefObject<HTMLInputElement>,setSigFileProgress: (progress: number) => void,ImageType: 'logo' | 'signature') => {
     
         const fileInput = fileInputRef.current;
         if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
@@ -75,7 +75,7 @@ export const handleSignatureFileUpload = async (fileInputRef:RefObject<HTMLInput
             // Upload file
             const uploadResponse = await upload({
             file,
-            folder: "/Invox/Logos",
+            folder: `Invox/${ImageType}s`,
             fileName: `${file.name}-${Date.now()}.png`,
             expire,
             token,
@@ -86,7 +86,7 @@ export const handleSignatureFileUpload = async (fileInputRef:RefObject<HTMLInput
             });
 
             // Save
-            const res = await saveImage(uploadResponse.url || "", uploadResponse.fileId || "", "signature");
+            const res = await saveImage(uploadResponse.url || "", uploadResponse.fileId || "", ImageType);
             if (res?.success) {
             setSigFileProgress(0);
             toast.success("Upload successfully");

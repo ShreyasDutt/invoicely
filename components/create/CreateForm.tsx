@@ -32,6 +32,7 @@ import { AddItemDialog } from "./AddItemDialog"
 import { Trash2 } from "lucide-react"
 import { EditItemDialog } from "./EditItemDialog"
 import { CreateSignatureSidebar } from "./createSignatureSidebar"
+import { SaveLogoSidebar } from "./saveLogoSidebar"
 
 
 
@@ -66,12 +67,7 @@ export function CreateForm() {
                   <FieldLabel>
                     Company Logo
                   </FieldLabel>
-                  <Input 
-                    id="picture" 
-                    type="file"
-                    accept="image/*"
-                    className="rounded-lg"
-                  />
+                  <SaveLogoSidebar/>
                 </FieldSet>
 
                 <FieldSet>
