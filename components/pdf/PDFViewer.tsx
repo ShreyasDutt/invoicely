@@ -4,7 +4,7 @@ import getSymbolFromCurrency from "currency-symbol-map";
 import { useAtom } from "jotai"
 
 const PDFViewer = () => {
-  const [invoiceData, setinvoiceData] = useAtom(invoiceAtom);
+  const [invoiceData] = useAtom(invoiceAtom);
   const subtotal = invoiceData.items.reduce((sum, item) => sum + item.total, 0);
   const isDark = invoiceData.mode === 'dark';
     

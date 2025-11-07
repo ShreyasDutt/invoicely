@@ -6,7 +6,7 @@ import Photo from "../db/schemas/photo.model";
 import { auth } from "@clerk/nextjs/server";
 import User from "../db/schemas/user.model";
 
-export const saveSignature = async(url:string,fileId:string,type:'signature'|'logo') =>{
+export const saveImage = async(url:string,fileId:string,type:'signature'|'logo') =>{
     try{
         const user = await auth();
         if (!user) {throw new Error("Unauthorized");}

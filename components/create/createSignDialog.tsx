@@ -10,10 +10,10 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { BrushCleaning, MoonIcon, SunMedium } from "lucide-react"
-import { useRef, useState } from "react"
+import { RefObject, useRef, useState } from "react"
 import SignatureCanvas from "react-signature-canvas"
 
-export function CreateSignDialog({onSave}:{onSave?:(dataUrl:string)=>void}) {
+export function CreateSignDialog({onSave}:{onSave?:(dataUrl:string )=>void}) {
     const [dark, setdark] = useState<boolean>(false);
     const [show, setshow] = useState(false);
     const sigCanvas = useRef<SignatureCanvas>(null);
@@ -42,7 +42,7 @@ export function CreateSignDialog({onSave}:{onSave?:(dataUrl:string)=>void}) {
     <Dialog>
       <form>
         <DialogTrigger asChild>
-          <Button variant="outline" className="w-full">Create Signature</Button>
+          <Button variant="outline" className="w-full p-7 border-dashed">Create Signature</Button>
         </DialogTrigger>    
         <DialogContent className="w-fit">
           <DialogHeader>

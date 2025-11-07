@@ -29,7 +29,7 @@ import { Badge } from "../ui/badge"
 import { useAtom } from "jotai"
 import { invoiceAtom } from "@/lib/store"
 import { AddItemDialog } from "./AddItemDialog"
-import { Edit, Trash2 } from "lucide-react"
+import { Trash2 } from "lucide-react"
 import { EditItemDialog } from "./EditItemDialog"
 import { CreateSignatureSidebar } from "./createSignatureSidebar"
 
