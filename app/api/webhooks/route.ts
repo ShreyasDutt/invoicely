@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
                 lastName:last_name,
                 clerkId:id,
                 email:email_addresses[0].email_address,
-                username:username,
+                username:username || email_addresses[0].email_address.split('@')[0],
             })
             console.log("User Created with Email : "+email_addresses[0].email_address);
         } catch (error) {
@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
                 lastName:last_name,
                 clerkId:id,
                 email:email_addresses[0].email_address,
-                username:username
+                username:username || email_addresses[0].email_address.split('@')[0]
             })
             console.log("User updated with Email : "+email_addresses[0].email_address);
         } catch (error) {
