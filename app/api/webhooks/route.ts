@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
             await dbConnect();
             await User.create({
                 firstName:first_name,
-                lastName:last_name,
+                lastName:last_name || '',
                 clerkId:id,
                 email:email_addresses[0].email_address,
                 username:username || email_addresses[0].email_address.split('@')[0],
@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
             await dbConnect();
             await User.findOneAndUpdate({clerkId:id},{
                 firstName:first_name,
-                lastName:last_name,
+                lastName:last_name || '',
                 clerkId:id,
                 email:email_addresses[0].email_address,
                 username:username || email_addresses[0].email_address.split('@')[0]
