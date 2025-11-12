@@ -14,8 +14,11 @@ import { FolderKanban, Signature, Upload, Pencil } from "lucide-react"
 import { CreateSignDialog } from "./createSignDialog"
 import { useEffect, useRef, useState } from "react"
 import { handleFileUpload, handleImagekitUpload } from "@/lib/handleImageKitUpload";
+import { useAtom } from "jotai"
+import { invoiceAtom } from "@/lib/store"
 
 export function CreateSignatureSidebar() {
+  const [invoiceData, setinvoiceData] = useAtom(invoiceAtom);
   const [CanvasUrl, setCanvasUrl] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [progress, setProgress] = useState(0);
@@ -28,6 +31,7 @@ export function CreateSignatureSidebar() {
     handleImagekitUpload(CanvasUrl, setProgress);
   }, [CanvasUrl])
 
+  
 
   
     
@@ -158,11 +162,23 @@ export function CreateSignatureSidebar() {
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <h3 className="font-semibold text-sm">Saved Signatures</h3>
-              <span className="text-xs text-muted-foreground">0 items</span>
+              <span className="text-xs text-muted-foreground">{invoiceData.Signature?.length} items</span>
             </div>
-            
-            {/* Empty State */}
-            <div className="flex flex-col items-center justify-center py-12 px-4 rounded-xl border-2 border-dashed bg-muted/30">
+              
+             {invoiceData.Signature && invoiceData.Signature?.length > 0 ? (
+               <div className="grid grid-cols-4 gap-4">
+                {invoiceData.Signature?.map((sig, index) => (
+                  <img
+                  onClick={()=>{setinvoiceData({...invoiceData,companySignature:sig.url})}}
+                    key={index}
+                    src={sig.url}
+                    alt={`Signature ${index + 1}`}
+                    className="w-26 h-26 rounded-sm cursor-pointer"
+                  />
+                ))}
+                </div>
+
+             ):( <div className="flex flex-col items-center justify-center py-12 px-4 rounded-xl border-2 border-dashed bg-muted/30">
               <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-3">
                 <Signature className="w-8 h-8 text-muted-foreground" />
               </div>
@@ -172,7 +188,9 @@ export function CreateSignatureSidebar() {
               <p className="text-xs text-muted-foreground text-center max-w-[200px]">
                 Draw or upload a signature to add it to your library
               </p>
-            </div>
+            </div>)}   
+            {/* Empty State */}
+           
           </div>
         </div>
 

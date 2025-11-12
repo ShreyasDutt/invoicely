@@ -25,7 +25,7 @@ const PDFViewer = () => {
           {/* Left: Company Logo */}
           <div className={`rounded-xl p-4 ${isDark ? 'bg-white/10' : 'bg-white/80'} backdrop-blur-sm shadow-lg border ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
             <img 
-              src="https://via.placeholder.com/120x80/4F46E5/FFFFFF?text=LOGO" 
+              src={invoiceData.companyLogo} 
               alt="Company Logo"
               className="h-20 w-auto object-contain rounded-lg"
             />
@@ -239,7 +239,7 @@ const PDFViewer = () => {
           <div className={`rounded-xl p-6 ${isDark ? 'bg-gray-800/50 border border-gray-700' : 'bg-white border border-gray-200'} shadow-lg backdrop-blur-sm text-center`}>
             <div className={`mb-3 flex justify-center`}>
               <img 
-                src="https://via.placeholder.com/200x80/6366F1/FFFFFF?text=Signature" 
+                src={invoiceData.companySignature} 
                 alt="Company Signature"
                 className="h-20 w-auto object-contain"
               />

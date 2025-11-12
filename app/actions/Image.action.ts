@@ -54,21 +54,13 @@ export const DeleteImage = async(id:string,fileId:string) =>{
     }
 }
 
-export const GetImages = async() =>{
-    const user = await auth();
-    try {
-        await dbConnect();
-        const FoundUser = await User.findOne({
-            clerkId:user.userId,
-        })
-        if (!FoundUser) {
-            throw new Error("User not found");
-        }
-        const Images = FoundUser.populate('photos');
-        console.log(Images);
-        return Images;
-        
-    } catch (error) {
-        console.log(error);
-    }
-}
+export const GetImagesByType = async () => {
+  const user = await auth();
+  await dbConnect();
+  const FoundUser = await User.findOne({ clerkId: user.userId }).populate({
+    path: 'photos',
+  });
+
+  if (!FoundUser) throw new Error("User not found");
+    return JSON.parse(JSON.stringify(FoundUser.photos));
+};

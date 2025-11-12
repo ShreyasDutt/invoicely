@@ -13,8 +13,11 @@ import {
 import { FolderKanban, ImageIcon, Upload } from "lucide-react"
 import { useRef, useState } from "react"
 import { handleFileUpload } from "@/lib/handleImageKitUpload";
+import { useAtom } from "jotai"
+import { invoiceAtom } from "@/lib/store"
 
 export function SaveLogoSidebar() {
+  const [invoiceData, setinvoiceData] = useAtom(invoiceAtom);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [logoFileProgress, setLogoFileProgress] = useState(0);
   
@@ -107,11 +110,22 @@ export function SaveLogoSidebar() {
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <h3 className="font-semibold text-sm">Saved Logos</h3>
-              <span className="text-xs text-muted-foreground">0 items</span>
+              <span className="text-xs text-muted-foreground">{invoiceData.Logo?.length} items</span>
             </div>
-            
-            {/* Empty State */}
-            <div className="flex flex-col items-center justify-center py-12 px-4 rounded-xl border-2 border-dashed bg-muted/30">
+              {invoiceData.Logo && invoiceData.Logo?.length > 0 ? (
+               <div className="grid grid-cols-4 gap-4">
+                {invoiceData.Logo?.map((logo, index) => (
+                  <img
+                  onClick={()=>{setinvoiceData({...invoiceData,companyLogo:logo.url})}}
+                    key={index}
+                    src={logo.url}
+                    alt={`Logo ${index + 1}`}
+                    className="w-26 h-26 rounded-sm cursor-pointer"
+                  />
+                ))}
+                </div>
+
+             ):(<div className="flex flex-col items-center justify-center py-12 px-4 rounded-xl border-2 border-dashed bg-muted/30">
               <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-3">
                 <ImageIcon className="w-8 h-8 text-muted-foreground" />
               </div>
@@ -121,7 +135,9 @@ export function SaveLogoSidebar() {
               <p className="text-xs text-muted-foreground text-center max-w-[200px]">
                 Design or upload a logo to add it to your library
               </p>
-            </div>
+            </div>)}
+            {/* Empty State */}
+            
           </div>
         </div>
 

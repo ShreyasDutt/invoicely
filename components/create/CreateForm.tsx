@@ -22,7 +22,7 @@ import {
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@radix-ui/react-label"
 import getSymbolFromCurrency from "currency-symbol-map"
-import { useRef } from "react"
+import { useEffect, useRef } from "react"
 import { Button } from "../ui/button"
 import { Calendar28 } from "./DatePicker"
 import { Badge } from "../ui/badge"
@@ -33,12 +33,37 @@ import { Trash2 } from "lucide-react"
 import { EditItemDialog } from "./EditItemDialog"
 import { CreateSignatureSidebar } from "./createSignatureSidebar"
 import { SaveLogoSidebar } from "./saveLogoSidebar"
+import { PhotoInterface } from "@/app/db/schemas/photo.model"
+
+type Photo = {
+    _id:string,
+    url:string,
+    fileId:string,
+    type:'logo' | 'signature',
+    userId:string,
+    createdAt:Date,
+    updatedAt:Date,
+}
 
 
-
-export function CreateForm() {
+export function CreateForm({Images}:{Images:Photo[]}) {
   const [invoiceData, setinvoiceData] = useAtom(invoiceAtom);
   const ColorInputClick = useRef<HTMLInputElement>(null)
+
+useEffect(() => {
+  if (!Images || Images.length === 0) return;
+
+  const logos = Images.filter(img => img.type === "logo");
+  const signatures = Images.filter(img => img.type === "signature");
+
+  setinvoiceData(prev => ({
+    ...prev,
+    Logo: logos,
+    Signature: signatures
+  }));
+}, [Images, setinvoiceData]);
+
+
   
 
   enum Mode {
@@ -54,6 +79,7 @@ export function CreateForm() {
       collapsible
       className="w-full md:border md:rounded-xl"
       defaultValue="item-1"
+
     >
       <AccordionItem value="item-1" className="border-b last:border-b-0">
         <AccordionTrigger className="px-4 hover:no-underline md:rounded-t-xl">

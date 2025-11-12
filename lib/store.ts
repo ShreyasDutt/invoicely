@@ -1,5 +1,7 @@
 import {atom} from "jotai";
 
+
+
 export type PersonInfo = {
   name: string
   address: string
@@ -12,6 +14,16 @@ export type Item = {
   qty: number
   price: number
   total: number
+}
+
+type Photo = {
+  _id: string
+  url: string
+  fileId: string
+  type: 'logo' | 'signature'
+  userId: string
+  createdAt: Date
+  updatedAt: Date
 }
 
 enum Mode {
@@ -35,7 +47,8 @@ export type InvoiceData = {
   notes?: string
   TermsAndConditions?: string
   items: Item[]
-
+  Signature?: Photo[]
+  Logo?: Photo[]
 }
 
 export const invoiceAtom = atom<InvoiceData>({
@@ -50,5 +63,7 @@ export const invoiceAtom = atom<InvoiceData>({
   billedTo: { name: "John Doe", address: "123 Main St, USA" },
   items: [],
   companyLogo: "",
-  companySignature: ""
+  companySignature: "",
+  Logo: [],
+  Signature: [],
 })

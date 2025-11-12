@@ -1,3 +1,4 @@
+import { GetImagesByType } from "@/app/actions/Image.action"
 import { CreateForm } from "@/components/create/CreateForm"
 import PDFViewer from "@/components/pdf/PDFViewer"
 import Nav from "@/components/shared/Nav"
@@ -5,7 +6,11 @@ import { Sidebar } from "@/components/shared/Sidebar"
 import { Button } from "@/components/ui/button"
 import { Download, ScanEye } from "lucide-react"
 
-const page = () => {
+const page = async() => {
+
+  const Images = await GetImagesByType();
+  
+
   return (
     <>
       <div>
@@ -19,7 +24,7 @@ const page = () => {
       <div className="flex gap-5 h-[calc(100vh-84px)]"> 
         
         <div className="w-full md:w-6xl md:border md:p-5 overflow-y-auto">
-          <CreateForm />
+          <CreateForm Images={Images} />
         </div>
         
         <div className="w-full border p-4 overflow-y-auto hidden md:block">
