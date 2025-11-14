@@ -9,195 +9,155 @@ const PDFViewer = () => {
   const isDark = invoiceData.mode === 'dark';
     
   return (
-    <div className={`max-w-4xl mx-auto rounded-2xl overflow-hidden shadow-2xl font-mono ${isDark ? 'bg-gradient-to-br from-gray-900 to-gray-800' : 'bg-gradient-to-br from-white to-gray-50'}`}>
-      {/* Invoice Header with Gradient */}
-      <div 
-        className="relative p-8 overflow-hidden"
-        style={{
-          background: `linear-gradient(135deg, ${invoiceData.AccentColor}15 0%, ${invoiceData.AccentColor}05 100%)`
-        }}
-      >
-        <div className={`absolute top-0 right-0 w-64 h-64 rounded-full blur-3xl opacity-20`} 
-          style={{backgroundColor: invoiceData.AccentColor}}
-        ></div>
-        
-        <div className="flex justify-between items-start relative z-10">
-          {/* Left: Company Logo */}
-          <div className={`rounded-xl p-4 ${isDark ? 'bg-white/10' : 'bg-white/80'} backdrop-blur-sm shadow-lg border ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+    <div className={`max-w-4xl mx-auto shadow-lg ${isDark ? 'bg-black' : 'bg-white'}`}>
+      {/* Invoice Header */}
+      <div className={`p-12 border-b-2 ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+        <div className="flex justify-between items-start">
+          {/* Left: Company Logo & Info */}
+          <div className="flex-1">
             <img 
               src={invoiceData.companyLogo} 
               alt="Company Logo"
-              className="h-20 w-auto object-contain rounded-lg"
+              className="h-16 w-auto object-contain mb-4"
             />
+            <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} leading-relaxed`}>
+              <p className={`font-bold text-base mb-1 ${isDark ? 'text-gray-200' : 'text-gray-800'}`}>
+                {invoiceData.billedBy.name}
+              </p>
+              <p className="whitespace-pre-line">{invoiceData.billedBy.address}</p>
+            </div>
           </div>
 
-          {/* Right: Invoice Title */}
+          {/* Right: Invoice Title & Details */}
           <div className="text-right">
             <h1 
-              className="text-5xl font-bold tracking-tight" 
+              className="text-4xl font-bold mb-6 tracking-wide"
               style={{color: invoiceData.AccentColor}}
             >
               INVOICE
             </h1>
-            <p className={`text-xl mt-2 font-semibold ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
-              {invoiceData.InvoicePrefix}-{invoiceData.InvoiceNumber}
-            </p>
-          </div>
-        </div>
-      </div>
-      
-      {/* Invoice Details - Modern Card Style */}
-      <div className="px-8 py-6">
-        <div className={`rounded-xl p-6 ${isDark ? 'bg-gray-800/50 border border-gray-700' : 'bg-white border border-gray-200'} shadow-lg backdrop-blur-sm`}>
-          <div className="grid grid-cols-3 gap-6">
-            <div>
-              <p className={`text-xs font-semibold uppercase tracking-wider mb-2 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                Serial Number
-              </p>
-              <p className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                {invoiceData.InvoiceNumber}
-              </p>
-            </div>
-            <div>
-              <p className={`text-xs font-semibold uppercase tracking-wider mb-2 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                Date
-              </p>
-              <p className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                {invoiceData.date.toLocaleDateString()}
-              </p>
-            </div>
-            <div>
-              <p className={`text-xs font-semibold uppercase tracking-wider mb-2 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                Currency
-              </p>
-              <p className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                {invoiceData.currency} {getSymbolFromCurrency(invoiceData.currency)}
-              </p>
+            <div className="space-y-2 text-sm">
+              <div className="flex justify-between gap-8">
+                <span className={`font-semibold ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Invoice Number:</span>
+                <span className={`font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  {invoiceData.InvoicePrefix}-{invoiceData.InvoiceNumber}
+                </span>
+              </div>
+              <div className="flex justify-between gap-8">
+                <span className={`font-semibold ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Date:</span>
+                <span className={`${isDark ? 'text-gray-200' : 'text-gray-800'}`}>
+                  {invoiceData.date.toLocaleDateString()}
+                </span>
+              </div>
+              <div className="flex justify-between gap-8">
+                <span className={`font-semibold ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Currency:</span>
+                <span className={`${isDark ? 'text-gray-200' : 'text-gray-800'}`}>
+                  {invoiceData.currency} {getSymbolFromCurrency(invoiceData.currency)}
+                </span>
+              </div>
             </div>
           </div>
         </div>
       </div>
       
-      {/* Billed By and Billed To - Modern Cards */}
-      <div className="grid grid-cols-2 gap-6 px-8 pb-6">
-        <div className={`rounded-xl p-6 ${isDark ? 'bg-gray-800/50 border border-gray-700' : 'bg-white border border-gray-200'} shadow-lg backdrop-blur-sm`}>
-          <h3 
-            className="text-sm font-bold uppercase tracking-wider mb-4 pb-2 border-b-2" 
-            style={{
-              color: invoiceData.AccentColor,
-              borderColor: invoiceData.AccentColor
-            }}
-          >
-            Billed By
+      {/* Bill To Section */}
+      <div className={`px-12 py-8 border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+        <div>
+          <h3 className={`text-xs font-bold uppercase tracking-wider mb-3 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+            Bill To
           </h3>
-          <p className={`font-bold text-lg mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-            {invoiceData.billedBy.name}
-          </p>
-          <p className={`text-sm leading-relaxed ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
-            {invoiceData.billedBy.address}
-          </p>
-        </div>
-        
-        <div className={`rounded-xl p-6 ${isDark ? 'bg-gray-800/50 border border-gray-700' : 'bg-white border border-gray-200'} shadow-lg backdrop-blur-sm`}>
-          <h3 
-            className="text-sm font-bold uppercase tracking-wider mb-4 pb-2 border-b-2" 
-            style={{
-              color: invoiceData.AccentColor,
-              borderColor: invoiceData.AccentColor
-            }}
-          >
-            Billed To
-          </h3>
-          <p className={`font-bold text-lg mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+          <p className={`font-bold text-base mb-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>
             {invoiceData.billedTo.name}
           </p>
-          <p className={`text-sm leading-relaxed ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+          <p className={`text-sm leading-relaxed ${isDark ? 'text-gray-400' : 'text-gray-600'} whitespace-pre-line`}>
             {invoiceData.billedTo.address}
           </p>
         </div>
       </div>
       
-      {/* Items Table - Modern Design */}
-      <div className="px-8 pb-6">
-        <div className={`rounded-xl overflow-hidden ${isDark ? 'bg-gray-800/50 border border-gray-700' : 'bg-white border border-gray-200'} shadow-lg backdrop-blur-sm`}>
-          {/* Table Header */}
-          <div 
-            className="grid grid-cols-12 text-white font-bold text-sm"
-            style={{
-              background: `linear-gradient(135deg, ${invoiceData.AccentColor} 0%, ${invoiceData.AccentColor}dd 100%)`
-            }}
-          >
-            <div className="col-span-6 p-4">ITEM DESCRIPTION</div>
-            <div className="col-span-2 p-4 text-center">QTY</div>
-            <div className="col-span-2 p-4 text-right">PRICE</div>
-            <div className="col-span-2 p-4 text-right">TOTAL</div>
-          </div>
-          
-          {/* Table Rows */}
-          {invoiceData.items.map((item, index) => (
-            <div 
-              key={index} 
-              className={`grid grid-cols-12 border-t transition-colors ${
-                isDark 
-                  ? 'border-gray-700 hover:bg-gray-700/30' 
-                  : 'border-gray-200 hover:bg-gray-50'
-              }`}
-            >
-              <div className={`col-span-6 p-4 ${isDark ? 'text-gray-100' : 'text-gray-900'}`}>
-                <p className="font-semibold">{item.name}</p>
-                {item.description && (
-                  <p className={`text-xs mt-1 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                    {item.description}
+      {/* Items Table */}
+      <div className="px-12 py-6">
+        <table className="w-full">
+          <thead>
+            <tr className={`border-b-2 ${isDark ? 'border-gray-700' : 'border-gray-300'}`}>
+              <th className={`text-left py-3 text-xs font-bold uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                Description
+              </th>
+              <th className={`text-center py-3 text-xs font-bold uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                Qty
+              </th>
+              <th className={`text-right py-3 text-xs font-bold uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                Unit Price
+              </th>
+              <th className={`text-right py-3 text-xs font-bold uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                Amount
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {invoiceData.items.map((item, index) => (
+              <tr 
+                key={index}
+                className={`border-b ${isDark ? 'border-gray-800' : 'border-gray-100'}`}
+              >
+                <td className="py-4">
+                  <p className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    {item.name}
                   </p>
-                )}
-              </div>
-              <div className={`col-span-2 p-4 text-center ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                {item.qty}
-              </div>
-              <div className={`col-span-2 p-4 text-right ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                {getSymbolFromCurrency(invoiceData.currency)}{item.price.toFixed(2)}
-              </div>
-              <div className={`col-span-2 p-4 text-right font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                {getSymbolFromCurrency(invoiceData.currency)}{item.total.toFixed(2)}
-              </div>
-            </div>
-          ))}
-        </div>
+                  {item.description && (
+                    <p className={`text-xs mt-1 ${isDark ? 'text-gray-500' : 'text-gray-500'}`}>
+                      {item.description}
+                    </p>
+                  )}
+                </td>
+                <td className={`py-4 text-center ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                  {item.qty}
+                </td>
+                <td className={`py-4 text-right ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                  {getSymbolFromCurrency(invoiceData.currency)}{item.price.toFixed(2)}
+                </td>
+                <td className={`py-4 text-right font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  {getSymbolFromCurrency(invoiceData.currency)}{item.total.toFixed(2)}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
       
-      {/* Totals Section - Sleek Card */}
-      <div className="px-8 pb-8">
+      {/* Totals Section */}
+      <div className="px-12 py-6">
         <div className="flex justify-end">
-          <div className={`w-full md:w-96 rounded-xl overflow-hidden ${isDark ? 'bg-gray-800/50 border border-gray-700' : 'bg-white border border-gray-200'} shadow-lg backdrop-blur-sm`}>
-            <div className={`flex justify-between p-5 border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
-              <span className={`font-semibold ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
-                Subtotal
+          <div className="w-80">
+            <div className={`flex justify-between py-3 border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+              <span className={`font-semibold ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                Subtotal:
               </span>
-              <span className={`font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+              <span className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                 {getSymbolFromCurrency(invoiceData.currency)}{subtotal.toFixed(2)}
               </span>
             </div>
             
-            <div 
-              className="p-6"
-              style={{
-                background: `linear-gradient(135deg, ${invoiceData.AccentColor}20 0%, ${invoiceData.AccentColor}10 100%)`
-              }}
-            >
-              <div className="flex justify-between items-center">
-                <span className="text-xl font-bold" style={{color: invoiceData.AccentColor}}>
-                  TOTAL
-                </span>
-                <span className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  {getSymbolFromCurrency(invoiceData.currency)}{subtotal.toFixed(2)}
-                </span>
-              </div>
+            <div className={`flex justify-between py-4 border-b-2 ${isDark ? 'border-gray-600' : 'border-gray-400'}`}>
+              <span className={`text-lg font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                Total Due:
+              </span>
+              <span 
+                className="text-2xl font-bold"
+                style={{color: invoiceData.AccentColor}}
+              >
+                {getSymbolFromCurrency(invoiceData.currency)}{subtotal.toFixed(2)}
+              </span>
             </div>
             
             {invoiceData.paymentTerms && (
-              <div className={`px-6 py-4 text-sm ${isDark ? 'text-gray-400 bg-gray-900/30' : 'text-gray-500 bg-gray-50'}`}>
-                <p className="font-semibold mb-1">Payment Terms</p>
-                <p>{invoiceData.paymentTerms}</p>
+              <div className="mt-4">
+                <p className={`text-xs font-semibold mb-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                  Payment Terms
+                </p>
+                <p className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                  {invoiceData.paymentTerms}
+                </p>
               </div>
             )}
           </div>
@@ -206,49 +166,47 @@ const PDFViewer = () => {
 
       {/* Additional Info Section */}
       {(invoiceData.notes || invoiceData.TermsAndConditions) && (
-        <div className="px-8 pb-8">
-          <div className={`rounded-xl p-6 ${isDark ? 'bg-gray-800/50 border border-gray-700' : 'bg-white border border-gray-200'} shadow-lg backdrop-blur-sm space-y-4`}>
-            {invoiceData.notes && (
-              <div>
-                <h4 className={`text-sm font-bold uppercase tracking-wider mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  Notes
-                </h4>
-                <p className={`text-sm leading-relaxed ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                  {invoiceData.notes}
-                </p>
-              </div>
-            )}
-            
-            {invoiceData.TermsAndConditions && (
-              <div>
-                <h4 className={`text-sm font-bold uppercase tracking-wider mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  Terms & Conditions
-                </h4>
-                <p className={`text-sm leading-relaxed ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                  {invoiceData.TermsAndConditions}
-                </p>
-              </div>
-            )}
-          </div>
+        <div className={`px-12 py-6 border-t ${isDark ? 'border-gray-700' : 'border-gray-200'} space-y-6`}>
+          {invoiceData.notes && (
+            <div>
+              <h4 className={`text-xs font-bold uppercase tracking-wider mb-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                Notes
+              </h4>
+              <p className={`text-sm leading-relaxed ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                {invoiceData.notes}
+              </p>
+            </div>
+          )}
+          
+          {invoiceData.TermsAndConditions && (
+            <div>
+              <h4 className={`text-xs font-bold uppercase tracking-wider mb-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                Terms & Conditions
+              </h4>
+              <p className={`text-sm leading-relaxed ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                {invoiceData.TermsAndConditions}
+              </p>
+            </div>
+          )}
         </div>
       )}
 
       {/* Signature Section */}
-      <div className="px-8 pb-8">
+      <div className={`px-12 py-8 border-t ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
         <div className="flex justify-end">
-          <div className={`rounded-xl p-6 ${isDark ? 'bg-gray-800/50 border border-gray-700' : 'bg-white border border-gray-200'} shadow-lg backdrop-blur-sm text-center`}>
-            <div className={`mb-3 flex justify-center`}>
+          <div className="text-center w-64">
+            <div className="mb-4">
               <img 
                 src={invoiceData.companySignature} 
                 alt="Company Signature"
-                className="h-20 w-auto object-contain"
+                className="h-16 w-auto object-contain mx-auto"
               />
             </div>
-            <div className={`border-t-2 pt-2 ${isDark ? 'border-gray-600' : 'border-gray-300'}`}>
+            <div className={`border-t pt-2 ${isDark ? 'border-gray-600' : 'border-gray-400'}`}>
               <p className={`font-semibold text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                 Authorized Signature
               </p>
-              <p className={`text-xs mt-1 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+              <p className={`text-xs mt-1 ${isDark ? 'text-gray-500' : 'text-gray-500'}`}>
                 {invoiceData.billedBy.name}
               </p>
             </div>
@@ -256,9 +214,9 @@ const PDFViewer = () => {
         </div>
       </div>
 
-      {/* Footer with Accent Color */}
+      {/* Footer Accent */}
       <div 
-        className="h-2"
+        className="h-1"
         style={{backgroundColor: invoiceData.AccentColor}}
       ></div>
     </div>

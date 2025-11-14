@@ -33,7 +33,6 @@ import { Trash2 } from "lucide-react"
 import { EditItemDialog } from "./EditItemDialog"
 import { CreateSignatureSidebar } from "./createSignatureSidebar"
 import { SaveLogoSidebar } from "./saveLogoSidebar"
-import { PhotoInterface } from "@/app/db/schemas/photo.model"
 
 type Photo = {
     _id:string,
