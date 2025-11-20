@@ -1,6 +1,5 @@
 import { GetImagesByType } from "@/app/actions/Image.action"
 import PreviewSwitcher from "@/components/create/PreviewSwitcher"
-import Nav from "@/components/shared/Nav"
 
 const page = async() => {
 
@@ -9,9 +8,6 @@ const page = async() => {
 
   return (
     <>
-      <div>
-        <Nav />
-      </div>
       <PreviewSwitcher Images={Images}/>
     </>
   )

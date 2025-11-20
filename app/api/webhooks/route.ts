@@ -9,12 +9,11 @@ export async function POST(req: NextRequest) {
     console.log("Webhook verified:", evt.type);
 
         if (evt.type === 'user.created') {
-            const {id,first_name,last_name,email_addresses,username} = evt.data;
+            const {id,first_name,email_addresses,username} = evt.data;
         try {
             await dbConnect();
             await User.create({
                 firstName:first_name,
-                lastName:last_name || '',
                 clerkId:id,
                 email:email_addresses[0].email_address,
                 username:username || email_addresses[0].email_address.split('@')[0],
@@ -26,12 +25,11 @@ export async function POST(req: NextRequest) {
         }
 
         if (evt.type === 'user.updated') {
-            const {id,first_name,last_name,email_addresses,username} = evt.data;
+            const {id,first_name,email_addresses,username} = evt.data;
         try {
             await dbConnect();
             await User.findOneAndUpdate({clerkId:id},{
                 firstName:first_name,
-                lastName:last_name || '',
                 clerkId:id,
                 email:email_addresses[0].email_address,
                 username:username || email_addresses[0].email_address.split('@')[0]

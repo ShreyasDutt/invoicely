@@ -30,8 +30,9 @@ enum Mode {
 }
 
 export interface InvoiceInterface extends Document {
+  createdBy: mongoose.Schema.Types.ObjectId;
   companyLogo?: string;
-  companySignature?: string;
+  companySignature?: string;  
   companyName: string;
   billedBy: PersonInfo;
   billedTo: PersonInfo;
@@ -76,6 +77,7 @@ const PhotoSchema = new Schema<Photo>(
 
 const InvoiceModel = new Schema<InvoiceInterface>(
   {
+    createdBy :{ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     companyLogo: { type: String },
     companySignature: { type: String },
     companyName: { type: String, required: true },

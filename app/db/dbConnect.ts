@@ -1,3 +1,4 @@
+
 import mongoose from "mongoose";
 const URI= process.env.MONGODB_URI;
 

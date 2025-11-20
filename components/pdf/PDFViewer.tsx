@@ -16,7 +16,7 @@ const PDFViewer = () => {
           {/* Left: Company Logo & Info */}
           <div className="flex-1">
             <img 
-              src={invoiceData.companyLogo} 
+              src={invoiceData.companyLogo || '/default-logo.png'} 
               alt="Company Logo"
               className="h-16 w-auto object-contain mb-4"
             />
@@ -197,7 +197,7 @@ const PDFViewer = () => {
           <div className="text-center w-64">
             <div className="mb-4">
               <img 
-                src={invoiceData.companySignature} 
+                src={invoiceData.companySignature || '/default-signature.png'} 
                 alt="Company Signature"
                 className="h-16 w-auto object-contain mx-auto"
               />

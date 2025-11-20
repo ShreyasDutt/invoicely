@@ -3,21 +3,17 @@ import mongoose,{Schema,Document} from "mongoose";
 export interface UserInterface extends Document {
     _id:mongoose.Types.ObjectId,
     firstName:string,
-    lastName:string,
     clerkId:string,
     email:string,
     username:string,
     photos:[mongoose.Types.ObjectId],
+    Invoices:[mongoose.Types.ObjectId],
     createdAt:Date,
     updatedAt:Date
 }
 
 const UserSchema = new Schema<UserInterface>({
     firstName:{
-        type:String,
-        required:true
-    },
-    lastName:{
         type:String,
         required:true
     },
@@ -38,6 +34,11 @@ const UserSchema = new Schema<UserInterface>({
     photos:[{
         type:Schema.Types.ObjectId,
         ref:'Photo'
+    }],
+    Invoices:[{
+        type:Schema.Types.ObjectId,
+        ref:'Invoice',
+        default:[]
     }]
 },{
     timestamps:true
